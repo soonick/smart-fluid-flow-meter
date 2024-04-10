@@ -2,6 +2,7 @@ mod api;
 mod error;
 mod handler;
 mod json;
+mod storage;
 
 use crate::handler::measure::save_measure;
 
