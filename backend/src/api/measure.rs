@@ -9,7 +9,7 @@ pub struct SaveMeasureInput {
     pub recorded_at: DateTime<Local>,
 }
 
-#[derive(Serialize, Clone)]
+#[derive(Clone, Deserialize, Serialize)]
 pub struct Measure {
     pub id: String,
     pub device_id: String,

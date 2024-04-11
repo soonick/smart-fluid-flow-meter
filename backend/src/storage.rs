@@ -1,4 +1,5 @@
 pub mod error;
+pub mod firestore;
 pub mod mysql;
 
 use crate::api::measure::Measure;
