@@ -1,6 +1,7 @@
 use crate::api::measure::Measure;
 use crate::storage::{error::Error, error::ErrorCode, Storage};
 
+use async_trait::async_trait;
 use sqlx::mysql::{MySql, MySqlPoolOptions};
 use sqlx::Pool;
 
@@ -27,6 +28,7 @@ impl MySqlStorage {
     }
 }
 
+#[async_trait]
 impl Storage for MySqlStorage {
     // The id of the passed measure is ignored. An id will be assigned automtically
     async fn save_measure(&self, measure: Measure) -> Result<Measure, Error> {

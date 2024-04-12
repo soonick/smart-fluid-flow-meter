@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+async-trait = "0.1.80"
 axum = { version = "0.7.5", features = ["macros"] }
 chrono = { version = "0.4.37", features = ["serde"] }
 firestore = "0.40.1"

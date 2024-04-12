@@ -4,6 +4,9 @@ pub mod mysql;
 
 use crate::api::measure::Measure;
 
-pub trait Storage {
+use async_trait::async_trait;
+
+#[async_trait]
+pub trait Storage: Send + Sync {
     async fn save_measure(&self, measure: Measure) -> Result<Measure, error::Error>;
 }

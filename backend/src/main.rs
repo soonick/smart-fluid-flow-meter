@@ -7,16 +7,20 @@ mod storage;
 use crate::handler::measure::save_measure;
 use crate::storage::{firestore::FirestoreStorage, Storage};
 
-use axum::{routing::post, Router};
+use axum::{extract::FromRef, routing::post, Router};
 use std::sync::Arc;
 use tracing::info;
 
-#[derive(Clone)]
-struct AppState<T>
-where
-    T: Storage,
-{
-    storage: Arc<T>,
+#[derive(Clone, FromRef)]
+struct AppState {
+    storage: Arc<dyn Storage>,
+}
+
+async fn app(storage: Arc<dyn Storage>) -> Router {
+    let state = AppState { storage };
+    Router::new()
+        .route("/measure", post(save_measure))
+        .with_state(state)
 }
 
 #[tokio::main]
@@ -28,10 +32,7 @@ async fn main() {
 
     let storage =
         Arc::new(FirestoreStorage::new("something").await);
-    let state = AppState { storage };
-    let app = Router::new()
-        .route("/measure", post(save_measure))
-        .with_state(state);
+    let app = app(storage).await;
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
         .await

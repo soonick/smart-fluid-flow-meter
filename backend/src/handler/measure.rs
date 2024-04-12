@@ -1,18 +1,14 @@
 use crate::api::measure::{Measure, SaveMeasureInput};
 use crate::error::app_error::AppError;
 use crate::json::extractor::Extractor;
-use crate::storage::Storage;
 use crate::AppState;
 
 use axum::extract::State;
 
-pub async fn save_measure<T>(
-    State(state): State<AppState<T>>,
+pub async fn save_measure(
+    State(state): State<AppState>,
     Extractor(input): Extractor<SaveMeasureInput>,
-) -> Result<Extractor<Measure>, AppError>
-where
-    T: Storage,
-{
+) -> Result<Extractor<Measure>, AppError> {
     let measure = Measure {
         id: "".to_string(),
         device_id: input.device_id,
