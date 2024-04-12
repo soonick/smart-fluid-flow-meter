@@ -1,0 +1,7 @@
+FROM rust:1.77.2
+
+RUN apt-get update
+
+EXPOSE 3000
+
+WORKDIR /smart-fluid-flow-meter/
