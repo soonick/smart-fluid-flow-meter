@@ -2094,16 +2094,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3c5e1a9a646d36c3599cd173a41282daf47c44583ad367b8e6837255952e5c67"
 
 [[package]]
-name = "smart-water-meter-backend"
+name = "smart_fluid_flow_meter_backend"
 version = "0.1.0"
 dependencies = [
  "async-trait",
  "axum 0.7.5",
  "chrono",
  "firestore",
+ "http-body-util",
+ "mime",
  "serde",
+ "serde_json",
  "sqlx",
  "tokio",
+ "tower",
  "tracing",
  "tracing-subscriber",
 ]

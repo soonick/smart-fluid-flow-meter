@@ -1,27 +1,8 @@
-mod api;
-mod error;
-mod handler;
-mod json;
-mod storage;
+use smart_fluid_flow_meter_backend::storage::firestore::FirestoreStorage;
 
-use crate::handler::measure::save_measure;
-use crate::storage::{firestore::FirestoreStorage, Storage};
-
-use axum::{extract::FromRef, routing::post, Router};
 use std::sync::Arc;
+use tokio::net::TcpListener;
 use tracing::info;
-
-#[derive(Clone, FromRef)]
-struct AppState {
-    storage: Arc<dyn Storage>,
-}
-
-async fn app(storage: Arc<dyn Storage>) -> Router {
-    let state = AppState { storage };
-    Router::new()
-        .route("/measure", post(save_measure))
-        .with_state(state)
-}
 
 #[tokio::main]
 async fn main() {
@@ -30,13 +11,10 @@ async fn main() {
         .with_line_number(true)
         .init();
 
-    let storage =
-        Arc::new(FirestoreStorage::new("something").await);
-    let app = app(storage).await;
+    let storage = Arc::new(FirestoreStorage::new("something").await);
+    let app = smart_fluid_flow_meter_backend::app(storage).await;
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
-        .await
-        .unwrap();
+    let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
     info!("listening on {}", listener.local_addr().unwrap());
     axum::serve(listener, app).await.unwrap();
 }
