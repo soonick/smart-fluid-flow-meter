@@ -4,4 +4,7 @@ RUN apt-get update
 
 EXPOSE 3000
 
+COPY . /smart-fluid-flow-meter/
 WORKDIR /smart-fluid-flow-meter/
+
+RUN cargo fetch

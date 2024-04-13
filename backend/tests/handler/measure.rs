@@ -7,10 +7,7 @@ use chrono::Local;
 use http_body_util::BodyExt;
 use serde_json::{json, Value};
 use smart_fluid_flow_meter_backend::{
-    api::measure::{
-        SaveMeasureInput,
-        Measure,
-    },
+    api::measure::{Measure, SaveMeasureInput},
     storage::memory::MemoryStorage,
 };
 use std::sync::Arc;
@@ -89,7 +86,9 @@ async fn save_measure_invalid_date() {
                 .method(http::Method::POST)
                 .uri("/measure")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
-                .body(Body::from("{\"device_id\": \"1\", \"measure\": \"1\", \"recorded_at\":\"today\"}"))
+                .body(Body::from(
+                    "{\"device_id\": \"1\", \"measure\": \"1\", \"recorded_at\":\"today\"}",
+                ))
                 .unwrap(),
         )
         .await
@@ -103,5 +102,54 @@ async fn save_measure_invalid_date() {
         body,
         json!({ "code": "InvalidInput", "message": "Invalid input" })
     );
-
 }
+
+#[tokio::test]
+async fn save_measure_database_failure() {
+    let storage = Arc::new(MemoryStorage::new().await);
+    let app = smart_fluid_flow_meter_backend::app(storage).await;
+
+    let input = SaveMeasureInput {
+        device_id: "999".to_string(),
+        measure: "134".to_string(),
+        recorded_at: Local::now(),
+    };
+    let response = app
+        .clone()
+        .oneshot(
+            Request::builder()
+                .method(http::Method::POST)
+                .uri("/measure")
+                .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
+                .body(Body::from(serde_json::to_string(&input).unwrap()))
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    // Try to insert with the same id so there is a failure
+    let response = app
+        .oneshot(
+            Request::builder()
+                .method(http::Method::POST)
+                .uri("/measure")
+                .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
+                .body(Body::from(serde_json::to_string(&input).unwrap()))
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+    assert_eq!(response.status(), StatusCode::INTERNAL_SERVER_ERROR);
+    let body = response.into_body().collect().await.unwrap().to_bytes();
+    let body: Value = serde_json::from_slice(&body).unwrap();
+    assert_eq!(
+        body,
+        json!({ "code": "InternalError", "message": "We made a mistake. Sorry" })
+    );
+}
+
+// TODO:
+// - Unit tests for firestore storage
+// - Unit tests for mysql storagek

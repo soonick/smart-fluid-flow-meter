@@ -9,3 +9,9 @@ To start the development version:
 ```
 make start
 ```
+
+To run tests:
+
+```
+make test
+```

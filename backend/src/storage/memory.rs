@@ -4,7 +4,13 @@
 //! restarts
 
 use crate::api::measure::Measure;
-use crate::storage::{error::Error, Storage};
+use crate::storage::{
+    error::{
+        Error,
+        ErrorCode,
+    },
+    Storage
+};
 
 use async_trait::async_trait;
 use std::collections::HashMap;
@@ -35,8 +41,20 @@ impl Storage for MemoryStorage {
 
         {
             let m = Arc::clone(&self.measure);
-            let mut measures = m.lock().unwrap();
-            measures.insert(new_measure.id.clone(), new_measure.clone());
+            // Fail if there is already a record with that ID
+            {
+                let measures = m.lock().unwrap();
+                if measures.contains_key(&new_measure.id) {
+                    return Err(Error {
+                        code: ErrorCode::UndefinedError,
+                    })
+                }
+            }
+
+            {
+                let mut measures = m.lock().unwrap();
+                measures.insert(new_measure.id.clone(), new_measure.clone());
+            }
         }
 
         Ok(new_measure)

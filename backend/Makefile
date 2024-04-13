@@ -12,12 +12,10 @@ start: clean build
 .PHONY: start
 
 test:
-	@docker run --rm -v $(PWD)/:/smart-fluid-flow-meter/ -w /smart-fluid-flow-meter/ smart-fluid-flow-meter-backend-image cargo test
+	@docker run -it --rm -v $(PWD)/:/smart-fluid-flow-meter/ -w /smart-fluid-flow-meter/ smart-fluid-flow-meter-backend-image cargo test
 .PHONY: test
 
 clean:
 	-@docker kill smart-fluid-flow-meter-backend-dev 2>/dev/null ||:
 	-@docker rm smart-fluid-flow-meter-backend-dev 2>/dev/null ||:
-	-@docker kill smart-fluid-flow-meter-backend-prod 2>/dev/null ||:
-	-@docker rm smart-fluid-flow-meter-backend-prod 2>/dev/null ||:
 .PHONY: clean
