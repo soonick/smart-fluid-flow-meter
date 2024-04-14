@@ -4,6 +4,7 @@ use crate::storage::{error::Error, error::ErrorCode, Storage};
 use async_trait::async_trait;
 use sqlx::mysql::{MySql, MySqlPoolOptions};
 use sqlx::Pool;
+use tracing::error;
 
 #[derive(Clone)]
 pub struct MySqlStorage {
@@ -18,9 +19,9 @@ impl MySqlStorage {
             .await
         {
             Ok(pool) => pool,
-            Err(_err) => panic!(
-                "Unable to create MySql connection pool using {}",
-                connection_string
+            Err(err) => panic!(
+                "Unable to create MySql connection pool using {}. Error: {}",
+                connection_string, err
             ),
         };
 
@@ -30,10 +31,10 @@ impl MySqlStorage {
 
 #[async_trait]
 impl Storage for MySqlStorage {
-    // The id of the passed measure is ignored. An id will be assigned automtically
+    // The id of the passed measure is ignored. An id will be assigned automatically
     async fn save_measure(&self, measure: Measure) -> Result<Measure, Error> {
         let inserted = match sqlx::query(
-            "INSERT INTO measurements(device_id, measure, recorded_at) VALUES(?, ?, ?)",
+            "INSERT INTO measurement(device_id, measure, recorded_at) VALUES(?, ?, ?)",
         )
         .bind(measure.device_id.clone())
         .bind(measure.measure.clone())
@@ -42,10 +43,11 @@ impl Storage for MySqlStorage {
         .await
         {
             Ok(inserted) => inserted,
-            Err(_err) => {
+            Err(err) => {
+                error!("Error: {}", err);
                 return Err(Error {
                     code: ErrorCode::UndefinedError,
-                })
+                });
             }
         };
 

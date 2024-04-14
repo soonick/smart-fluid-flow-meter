@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  smart-fluid-flow-meter-backend:
+    build:
+      dockerfile: dockerfiles/dev
+      context: ../
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - type: bind
+        source: ../
+        target: /smart-fluid-flow-meter/
+    command: >
+      sh -c "cargo test -- --nocapture"
+
+  mysql:
+    image: mysql:8.3.0
+    environment:
+      MYSQL_DATABASE: 'smart-fluid-flow-meter-backend'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    volumes:
+      - type: bind
+        source: ../assets/fixtures/mysql
+        target: /fixtures/
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    healthcheck:
+        test: "mysqladmin ping -h localhost --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD && mysql -h localhost --user=root --password=$$MYSQL_PASSWORD --database $$MYSQL_DATABASE < /fixtures/init.sql"
+        timeout: 20s
+        retries: 10

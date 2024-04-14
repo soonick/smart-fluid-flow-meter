@@ -8,10 +8,11 @@ use http_body_util::BodyExt;
 use serde_json::{json, Value};
 use smart_fluid_flow_meter_backend::{
     api::measure::{Measure, SaveMeasureInput},
-    storage::memory::MemoryStorage,
+    storage::{memory::MemoryStorage, mysql::MySqlStorage},
 };
 use std::sync::Arc;
 use tower::util::ServiceExt;
+use test_log::test;
 
 #[tokio::test]
 async fn save_measure_invalid_json() {
@@ -150,6 +151,40 @@ async fn save_measure_database_failure() {
     );
 }
 
+#[test(tokio::test)]
+async fn save_measure_success_mysql() {
+    let storage = Arc::new(MySqlStorage::new("mysql://user:password@mysql/smart-fluid-flow-meter-backend").await);
+    let app = smart_fluid_flow_meter_backend::app(storage).await;
+
+    let input = SaveMeasureInput {
+        device_id: "999".to_string(),
+        measure: "134".to_string(),
+        recorded_at: Local::now(),
+    };
+    let response = app
+        .oneshot(
+            Request::builder()
+                .method(http::Method::POST)
+                .uri("/measure")
+                .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
+                .body(Body::from(serde_json::to_string(&input).unwrap()))
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let body = response.into_body().collect().await.unwrap().to_bytes();
+    let expected = Measure {
+        id: "1".to_string(),
+        device_id: input.device_id.to_string(),
+        measure: input.measure.to_string(),
+        recorded_at: input.recorded_at,
+    };
+    let body: Value = serde_json::from_slice(&body).unwrap();
+    assert_eq!(body, serde_json::to_value(expected).unwrap());
+}
+
 // TODO:
 // - Unit tests for firestore storage
-// - Unit tests for mysql storagek

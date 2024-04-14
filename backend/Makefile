@@ -12,7 +12,8 @@ start: clean build
 .PHONY: start
 
 test:
-	@docker run -it --rm -v $(PWD)/:/smart-fluid-flow-meter/ -w /smart-fluid-flow-meter/ smart-fluid-flow-meter-backend-image cargo test
+	@docker-compose -f dockerfiles/docker-compose-test.yaml down
+	@docker-compose -f dockerfiles/docker-compose-test.yaml up --abort-on-container-exit --exit-code-from smart-fluid-flow-meter-backend
 .PHONY: test
 
 clean:
