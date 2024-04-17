@@ -5,8 +5,13 @@ services:
     build:
       dockerfile: dockerfiles/dev
       context: ../
+    environment:
+      FIRESTORE_EMULATOR_HOST: 'firestore:8200'
+      GOOGLE_APPLICATION_CREDENTIALS: "/service-account-key.json"
     depends_on:
       mysql:
+        condition: service_healthy
+      firestore:
         condition: service_healthy
     volumes:
       - type: bind
@@ -32,5 +37,18 @@ services:
       - '3306'
     healthcheck:
         test: "mysqladmin ping -h localhost --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD && mysql -h localhost --user=root --password=$$MYSQL_PASSWORD --database $$MYSQL_DATABASE < /fixtures/init.sql"
+        timeout: 20s
+        retries: 10
+
+  firestore:
+    build:
+      dockerfile: ../dockerfiles/firestore-emulator
+      context: .
+    ports:
+      - '8200:8200'
+    expose:
+      - '8200'
+    healthcheck:
+        test: "curl 0.0.0.0:8200"
         timeout: 20s
         retries: 10

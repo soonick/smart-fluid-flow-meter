@@ -12,8 +12,8 @@ start: clean build
 .PHONY: start
 
 test:
-	@docker-compose -f dockerfiles/docker-compose-test.yaml down
-	@docker-compose -f dockerfiles/docker-compose-test.yaml up --abort-on-container-exit --exit-code-from smart-fluid-flow-meter-backend
+	@docker-compose -f dockerfiles/docker-compose-test.yaml down --remove-orphans
+	@docker-compose -f dockerfiles/docker-compose-test.yaml up --build --abort-on-container-exit --exit-code-from smart-fluid-flow-meter-backend
 .PHONY: test
 
 clean:
