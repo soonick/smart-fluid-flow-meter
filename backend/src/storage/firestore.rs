@@ -16,7 +16,10 @@ impl FirestoreStorage {
     pub async fn new(project_id: &str) -> FirestoreStorage {
         let db = match FirestoreDb::new(project_id).await {
             Ok(db) => db,
-            Err(err) => panic!("Unable create firestore db for project: {}. Error: {}", project_id, err),
+            Err(err) => panic!(
+                "Unable create firestore db for project: {}. Error: {}",
+                project_id, err
+            ),
         };
 
         return FirestoreStorage { db };

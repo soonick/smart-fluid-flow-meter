@@ -1,6 +1,6 @@
 FROM rust:1.77.2
 
-RUN apt-get update
+RUN apt-get update && rustup component add rustfmt
 
 EXPOSE 3000
 

@@ -8,11 +8,11 @@ use http_body_util::BodyExt;
 use serde_json::{json, Value};
 use smart_fluid_flow_meter_backend::{
     api::measure::{Measure, SaveMeasureInput},
-    storage::{memory::MemoryStorage, mysql::MySqlStorage, firestore::FirestoreStorage},
+    storage::{firestore::FirestoreStorage, memory::MemoryStorage, mysql::MySqlStorage},
 };
 use std::sync::Arc;
-use tower::util::ServiceExt;
 use test_log::test;
+use tower::util::ServiceExt;
 
 #[tokio::test]
 async fn save_measure_invalid_json() {
@@ -153,7 +153,9 @@ async fn save_measure_database_failure() {
 
 #[test(tokio::test)]
 async fn save_measure_success_mysql() {
-    let storage = Arc::new(MySqlStorage::new("mysql://user:password@mysql/smart-fluid-flow-meter-backend").await);
+    let storage = Arc::new(
+        MySqlStorage::new("mysql://user:password@mysql/smart-fluid-flow-meter-backend").await,
+    );
     let app = smart_fluid_flow_meter_backend::app(storage).await;
 
     let input = SaveMeasureInput {

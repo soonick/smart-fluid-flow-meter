@@ -5,11 +5,8 @@
 
 use crate::api::measure::Measure;
 use crate::storage::{
-    error::{
-        Error,
-        ErrorCode,
-    },
-    Storage
+    error::{Error, ErrorCode},
+    Storage,
 };
 
 use async_trait::async_trait;
@@ -47,7 +44,7 @@ impl Storage for MemoryStorage {
                 if measures.contains_key(&new_measure.id) {
                     return Err(Error {
                         code: ErrorCode::UndefinedError,
-                    })
+                    });
                 }
             }
 

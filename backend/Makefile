@@ -16,6 +16,17 @@ test:
 	@docker-compose -f dockerfiles/docker-compose-test.yaml up --build --abort-on-container-exit --exit-code-from smart-fluid-flow-meter-backend
 .PHONY: test
 
+format:
+	@docker run --rm -v $(PWD)/:/smart-fluid-flow-meter/ -w /smart-fluid-flow-meter/ smart-fluid-flow-meter-backend-image cargo fmt
+.PHONY: format
+
+check-format:
+	@docker run --rm -v $(PWD)/:/smart-fluid-flow-meter/ -w /smart-fluid-flow-meter/ smart-fluid-flow-meter-backend-image cargo fmt --check
+.PHONY: check-format
+
+verify: check-format test
+.PHONY: verify
+
 clean:
 	-@docker kill smart-fluid-flow-meter-backend-dev 2>/dev/null ||:
 	-@docker rm smart-fluid-flow-meter-backend-dev 2>/dev/null ||:
