@@ -1,4 +1,4 @@
-#include "button.h"
+#include "button.hpp"
 #include "Arduino.h"
 
 Button::Button(const int pin) : buttonPin{pin} {}

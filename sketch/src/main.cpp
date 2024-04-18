@@ -2,19 +2,28 @@
 #include <r4-wifi-manager/r4-wifi-manager.hpp>
 #include "Arduino.h"
 #include "Hashtable.h"
-#include "button.h"
+#include "api/Common.h"
+#include "button.hpp"
+#include "fluid-meter.hpp"
 
-#define RESET_PIN 2
+#define RESET_PIN 7
+#define SENSOR_PIN 2
+
+const int MILLIS_BETWEEN_POSTS = 600'000;  // 10 minutes
 
 Hashtable<String, String> userConfig;
 R4WifiManager wifiManager;
 bool apStarted = false;
 bool connectedToWifi = false;
 Button resetButton = Button(RESET_PIN);
+FluidMeter* fluidMeter = nullptr;
+int lastPost = millis();
 
 void setup() {
   Serial.begin(9600);
   pinMode(RESET_PIN, INPUT_PULLUP);
+  pinMode(SENSOR_PIN, INPUT);
+  fluidMeter = FluidMeter::getInstance(SENSOR_PIN);
 }
 
 void reset() {
@@ -72,8 +81,19 @@ void connectToWifi() {
   }
 }
 
+void postMeasurements() {
+  if ((millis() - lastPost) > MILLIS_BETWEEN_POSTS) {
+    lastPost = millis();
+    float litters = fluidMeter->getVolume();
+    Serial.print("Read ");
+    Serial.print(litters);
+    Serial.println(" litters");
+  }
+}
+
 void loop() {
   reset();
   ap();
   connectToWifi();
+  postMeasurements();
 }
