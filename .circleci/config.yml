@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  build:
+  backend:
     machine:
       image: ubuntu-2204:2023.04.2
     steps:
@@ -9,13 +9,42 @@ jobs:
           fingerprints:
             - "SHA256:nJ4fjs8DBnXE5nlOYmIhp+mdPAhHGegiK+RcxQ+2/kA"
       - checkout
-      - run: sh scripts/verify-and-tag.sh
+      - run: cd backend && echo $SERVICE_ACCOUNT_KEY | base64 --decode > service-account-key.json && make verify
+  sketch:
+    machine:
+      image: ubuntu-2204:2023.04.2
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:nJ4fjs8DBnXE5nlOYmIhp+mdPAhHGegiK+RcxQ+2/kA"
+      - checkout
+      - run: cd sketch && make verify
+  tag:
+    machine:
+      image: ubuntu-2204:2023.04.2
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:nJ4fjs8DBnXE5nlOYmIhp+mdPAhHGegiK+RcxQ+2/kA"
+      - checkout
+      - run: sh scripts/tag.sh
 
 workflows:
   version: 2
-  push_and_publish:
+  test_and_tag:
     jobs:
-      - build:
+      - backend:
+          filters:
+            branches:
+              only: master
+      - sketch:
+          filters:
+            branches:
+              only: master
+      - tag:
+          requires:
+            - backend
+            - sketch
           filters:
             branches:
               only: master

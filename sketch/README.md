@@ -29,3 +29,11 @@ Assumes the device is connected at `/dev/ttyACM0`.
 ```
 make serial
 ```
+
+## Shell with Arduino CLI
+
+To get a shell with Arduino CLI:
+
+```
+make ssh
+```
