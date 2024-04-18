@@ -1,0 +1,21 @@
+version: 2.1
+
+jobs:
+  build:
+    machine:
+      image: ubuntu-2204:2023.04.2
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:nJ4fjs8DBnXE5nlOYmIhp+mdPAhHGegiK+RcxQ+2/kA"
+      - checkout
+      - run: sh scripts/verify-and-tag.sh
+
+workflows:
+  version: 2
+  push_and_publish:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master

@@ -24,7 +24,7 @@ check-format:
 	@docker run --rm -v $(PWD)/:/smart-fluid-flow-meter/ -w /smart-fluid-flow-meter/ smart-fluid-flow-meter-backend-image cargo fmt --check
 .PHONY: check-format
 
-verify: check-format test
+verify: clean build check-format test
 .PHONY: verify
 
 clean:
