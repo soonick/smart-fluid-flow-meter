@@ -4,11 +4,11 @@ build:
 .PHONY: build
 
 ssh: clean
-	@docker run -it -p 3000:3000 -v $(PWD)/:/smart-fluid-flow-meter/ --name smart-fluid-flow-meter-backend-dev smart-fluid-flow-meter-backend-image bash
+	@docker run --rm -it -p 3000:3000 -v $(PWD)/:/smart-fluid-flow-meter/ --name smart-fluid-flow-meter-backend-dev smart-fluid-flow-meter-backend-image bash
 .PHONY: ssh
 
-start: clean build
-	@docker run -it -p 3000:3000 -v $(PWD)/:/smart-fluid-flow-meter/ -w /smart-fluid-flow-meter/ --name smart-fluid-flow-meter-backend-dev smart-fluid-flow-meter-backend-image cargo run
+start:
+	@docker run --rm -it -p 3000:3000 -v $(PWD)/:/smart-fluid-flow-meter/ -w /smart-fluid-flow-meter/ --name smart-fluid-flow-meter-backend-dev smart-fluid-flow-meter-backend-image cargo run
 .PHONY: start
 
 test:

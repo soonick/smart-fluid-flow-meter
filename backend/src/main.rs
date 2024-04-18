@@ -1,4 +1,7 @@
+use smart_fluid_flow_meter_backend::settings::settings::Settings;
 use smart_fluid_flow_meter_backend::storage::firestore::FirestoreStorage;
+use smart_fluid_flow_meter_backend::storage::mysql::MySqlStorage;
+use smart_fluid_flow_meter_backend::storage::Storage;
 
 use std::sync::Arc;
 use tokio::net::TcpListener;
@@ -11,10 +14,18 @@ async fn main() {
         .with_line_number(true)
         .init();
 
-    let storage = Arc::new(FirestoreStorage::new("something").await);
+    let settings = Settings::new();
+
+    let storage: Arc<dyn Storage> = if !settings.database.firestore.project_id.is_empty() {
+        Arc::new(FirestoreStorage::new(&settings.database.firestore.project_id).await)
+    } else {
+        Arc::new(MySqlStorage::new(&settings.database.mysql.connection_string).await)
+    };
     let app = smart_fluid_flow_meter_backend::app(storage).await;
 
-    let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
+    let listener = TcpListener::bind(format!("127.0.0.1:{}", settings.service.port))
+        .await
+        .unwrap();
     info!("listening on {}", listener.local_addr().unwrap());
     axum::serve(listener, app).await.unwrap();
 }

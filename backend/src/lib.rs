@@ -2,6 +2,7 @@ pub mod api;
 mod error;
 mod handler;
 mod json;
+pub mod settings;
 pub mod storage;
 
 use crate::handler::measure::save_measure;

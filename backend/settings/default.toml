@@ -1,0 +1,8 @@
+[service]
+port = 3000
+
+[database.firestore]
+project_id = ""
+
+[database.mysql]
+connection_string = "mysql://user:pass@host/database"
