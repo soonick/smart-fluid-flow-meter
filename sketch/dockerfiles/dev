@@ -1,0 +1,19 @@
+FROM ubuntu:latest
+
+RUN apt-get update && \
+  apt-get install curl -y
+
+# Install Arduino CLI
+RUN mkdir /arduino-cli
+WORKDIR /arduino-cli
+RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+ENV PATH="${PATH}:/arduino-cli/bin"
+
+# Install required platforms
+RUN arduino-cli core install arduino:renesas_uno
+
+# Compile code
+COPY sketch.ino /sketch/sketch.ino
+COPY sketch.yaml /sketch/sketch.yaml
+WORKDIR /sketch
+RUN arduino-cli compile --fqbn arduino:renesas_uno:unor4wifi .
