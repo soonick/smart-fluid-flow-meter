@@ -1,3 +1,48 @@
+// int SENSOR_PIN = 2;
+// const float CONVERSION_FACTOR = 450;
+//
+// float totalLitters = 0;
+// long timeLastRun = 0;
+//
+// volatile int totalPulses;
+//
+// void countPulse() {
+//   totalPulses++;
+// }
+//
+// int getPulsesPerSecond() {
+//   delay(1000);
+//   int pulses;
+//
+//   // Protect totalPulses by disabling interrupts
+//   noInterrupts();
+//   pulses = totalPulses;
+//   totalPulses = 0;
+//   interrupts();
+//
+//   return pulses;
+// }
+//
+// void setup() {
+//   Serial.begin(9600);
+//   pinMode(SENSOR_PIN, INPUT);
+//   attachInterrupt(digitalPinToInterrupt(2), countPulse, RISING);
+//   timeLastRun = millis();
+// }
+//
+// void loop() {
+//   float pulsesPerSecond = getPulsesPerSecond();
+//   float littersPerSecond = pulsesPerSecond / CONVERSION_FACTOR;
+//   float secondsSinceLastRun = (millis() - timeLastRun) / 1000.0;
+//   timeLastRun = millis();
+//   totalLitters += littersPerSecond * secondsSinceLastRun;
+//
+//   Serial.print("Total litters: ");
+//   Serial.print(totalLitters);
+//   Serial.println(" L");
+// }
+
+
 #include <WiFi.h>
 
 char ssid[] = "ssid";
