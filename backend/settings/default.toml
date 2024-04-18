@@ -5,4 +5,4 @@ port = 3000
 project_id = ""
 
 [database.mysql]
-connection_string = "mysql://user:pass@host/database"
+connection_string = "mysql://user:password@mysql/smart-fluid-flow-meter-backend"

@@ -11,6 +11,11 @@ start:
 	@docker run --rm -it -p 3000:3000 -v $(PWD)/:/smart-fluid-flow-meter/ -w /smart-fluid-flow-meter/ --name smart-fluid-flow-meter-backend-dev smart-fluid-flow-meter-backend-image cargo run
 .PHONY: start
 
+start-mysql:
+	@docker-compose -f dockerfiles/docker-compose-mysql.yaml down --remove-orphans
+	@docker-compose -f dockerfiles/docker-compose-mysql.yaml up --build --abort-on-container-exit
+.PHONY: test
+
 test:
 	@docker-compose -f dockerfiles/docker-compose-test.yaml down --remove-orphans
 	@docker-compose -f dockerfiles/docker-compose-test.yaml up --build --abort-on-container-exit --exit-code-from smart-fluid-flow-meter-backend
