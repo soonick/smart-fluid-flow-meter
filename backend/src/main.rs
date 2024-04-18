@@ -23,7 +23,7 @@ async fn main() {
     };
     let app = smart_fluid_flow_meter_backend::app(storage).await;
 
-    let listener = TcpListener::bind(format!("127.0.0.1:{}", settings.service.port))
+    let listener = TcpListener::bind(format!("0.0.0.0:{}", settings.service.port))
         .await
         .unwrap();
     info!("listening on {}", listener.local_addr().unwrap());
