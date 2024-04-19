@@ -14,5 +14,13 @@ ssh:
 	@docker run --rm -it -v $(PWD)/:/sketch/ -w /sketch/ smart-fluid-flow-meter-sketch-image bash
 .PHONY: ssh
 
-verify: build
+format:
+	@docker run --rm -it -v $(PWD)/:/sketch/ -w /sketch/ smart-fluid-flow-meter-sketch-image clang-format *.ino -style=Chromium -i
+.PHONY: format
+
+check-format:
+	@docker run --rm -it -v $(PWD)/:/sketch/ -w /sketch/ smart-fluid-flow-meter-sketch-image clang-format *.ino -style=Chromium --dry-run -Werror
+.PHONY: check-format
+
+verify: build check-format
 .PHONY: verify

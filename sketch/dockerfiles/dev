@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
 RUN apt-get update && \
-  apt-get install curl -y
+  apt-get install curl clang-format -y
 
 # Install Arduino CLI
 RUN mkdir /arduino-cli
