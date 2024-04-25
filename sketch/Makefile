@@ -4,10 +4,11 @@ image:
 
 cmake: image
 	@docker run -it --rm \
-		-w /sketch/build/ \
-		-v $(PWD)/build:/sketch/build \
 		-v $(PWD)/CMakeLists.txt:/sketch/CMakeLists.txt \
+		-v $(PWD)/build:/sketch/build \
+		-v $(PWD)/deps:/sketch/deps \
 		-v $(PWD)/src:/sketch/src \
+		-w /sketch/build/ \
 		smart-fluid-flow-meter-sketch-dev-image \
 		sh -c "\
 			rm -f BoardOptions.cmake && \
@@ -23,10 +24,11 @@ cmake: image
 
 build: cmake
 	@docker run -it --rm \
-		-w /sketch/build/ \
-		-v $(PWD)/build:/sketch/build \
 		-v $(PWD)/CMakeLists.txt:/sketch/CMakeLists.txt \
+		-v $(PWD)/build:/sketch/build \
+		-v $(PWD)/deps:/sketch/deps \
 		-v $(PWD)/src:/sketch/src \
+		-w /sketch/build/ \
 		smart-fluid-flow-meter-sketch-dev-image \
 		sh -c "\
 			make \
@@ -35,11 +37,12 @@ build: cmake
 
 upload: build
 	@docker run --rm --device /dev/ttyACM0:/dev/ttyACM0 \
-		-w /sketch/build/ \
-		-v $(PWD)/build:/sketch/build \
 		-v $(PWD)/CMakeLists.txt:/sketch/CMakeLists.txt \
+		-v $(PWD)/build:/sketch/build \
+		-v $(PWD)/deps:/sketch/deps \
 		-v $(PWD)/src:/sketch/src \
 		-v $(PWD)/test:/sketch/test \
+		-w /sketch/build/ \
 		smart-fluid-flow-meter-sketch-dev-image \
 		sh -c " \
 			stty -F /dev/ttyACM0 1200 && \
@@ -49,7 +52,9 @@ upload: build
 .PHONY: upload
 
 serial:
-	@docker run --rm -it -v $(PWD)/src/:/sketch/src \
+	@docker run --rm -it \
+		-v $(PWD)/deps:/sketch/deps \
+		-v $(PWD)/src/:/sketch/src \
 		-v $(PWD)/test/:/sketch/test \
 		-w /sketch/ \
 		--device /dev/ttyACM0:/dev/ttyACM0 \
@@ -58,13 +63,17 @@ serial:
 .PHONY: serial
 
 ssh:
-	@docker run --rm -it -v $(PWD)/src/:/sketch/src \
+	@docker run --rm -it \
+		-v $(PWD)/deps:/sketch/deps \
+		-v $(PWD)/src/:/sketch/src \
 		-v $(PWD)/test/:/sketch/test \
 		-w /sketch/ smart-fluid-flow-meter-sketch-dev-image bash
 .PHONY: ssh
 
 format:
-	@docker run --rm -it -v $(PWD)/src/:/sketch/src \
+	@docker run --rm -it \
+		-v $(PWD)/deps:/sketch/deps \
+		-v $(PWD)/src/:/sketch/src \
 		-v $(PWD)/test/:/sketch/test \
 		-w /sketch/ \
 		smart-fluid-flow-meter-sketch-dev-image \
@@ -73,6 +82,7 @@ format:
 
 check-format:
 	@docker run --rm -it \
+		-v $(PWD)/deps:/sketch/deps \
 		-v $(PWD)/src/:/sketch/src \
 		-v $(PWD)/test/:/sketch/test \
 		-w /sketch/ \
@@ -82,29 +92,31 @@ check-format:
 
 cmake_test: image
 	@docker run -it --rm \
-		-w /sketch/test/build/ \
-		-v $(PWD)/test/build:/sketch/test/build \
-		-v $(PWD)/test/CMakeLists.txt:/sketch/test/CMakeLists.txt \
+		-v $(PWD)/deps:/sketch/deps \
 		-v $(PWD)/src:/sketch/src \
-		-v $(PWD)/test/src:/sketch/test/src \
-		-v $(PWD)/test/include:/sketch/test/include \
+		-v $(PWD)/test/CMakeLists.txt:/sketch/test/CMakeLists.txt \
+		-v $(PWD)/test/build:/sketch/test/build \
 		-v $(PWD)/test/external:/sketch/test/external \
+		-v $(PWD)/test/include:/sketch/test/include \
+		-v $(PWD)/test/src:/sketch/test/src \
+		-w /sketch/test/build/ \
 		smart-fluid-flow-meter-sketch-dev-image \
 		sh -c " \
 			cmake -D CMAKE_EXPORT_COMPILE_COMMANDS=1 .. && \
-			rm -f /sketch/compile_commands.json \
+			rm -f /sketch/test/compile_commands.json \
 		"
 .PHONY: cmake_test
 
 test: cmake_test
 	@docker run -it --rm \
-		-w /sketch/test/build/ \
-		-v $(PWD)/test/build:/sketch/test/build \
-		-v $(PWD)/test/CMakeLists.txt:/sketch/test/CMakeLists.txt \
+		-v $(PWD)/deps:/sketch/deps \
 		-v $(PWD)/src:/sketch/src \
-		-v $(PWD)/test/src:/sketch/test/src \
-		-v $(PWD)/test/include:/sketch/test/include \
+		-v $(PWD)/test/CMakeLists.txt:/sketch/test/CMakeLists.txt \
+		-v $(PWD)/test/build:/sketch/test/build \
 		-v $(PWD)/test/external:/sketch/test/external \
+		-v $(PWD)/test/include:/sketch/test/include \
+		-v $(PWD)/test/src:/sketch/test/src \
+		-w /sketch/test/build/ \
 		smart-fluid-flow-meter-sketch-dev-image \
 		sh -c " \
 			make && \
@@ -119,15 +131,22 @@ verify: image build check-format test
 vim: cmake cmake_test
 	@docker build -f dockerfiles/dev-vim -t smart-fluid-flow-meter-sketch-dev-vim-image .
 	@docker run --rm -it \
-		-v $(PWD)/build:/sketch/build \
 		-v $(PWD)/CMakeLists.txt:/sketch/CMakeLists.txt \
-		-v $(PWD)/README.md:/sketch/README.md \
 		-v $(PWD)/Makefile:/sketch/Makefile \
+		-v $(PWD)/README.md:/sketch/README.md \
+		-v $(PWD)/assets:/sketch/assets \
+		-v $(PWD)/build:/sketch/build \
+		-v $(PWD)/deps:/sketch/deps \
+		-v $(PWD)/dev-environments/vim/tmp:/root/.local/share/nvim \
+		-v $(PWD)/dockerfiles:/sketch/dockerfiles \
 		-v $(PWD)/src:/sketch/src \
 		-v $(PWD)/test:/sketch/test \
-		-v $(PWD)/dockerfiles:/sketch/dockerfiles \
-		-v $(PWD)/dev-environments/vim/tmp:/root/.local/share/nvim \
 		-w /sketch/ \
 		smart-fluid-flow-meter-sketch-dev-vim-image \
-		sh -c "ln -s /sketch/build/compile_commands.json /sketch/ && ln -s /sketch/test/build/compile_commands.json /sketch/test/ && nvim"
+		sh -c " \
+			rm -f /sketch/test/compile_commands.json && \
+			ln -s /sketch/build/compile_commands.json /sketch/ && \
+			ln -s /sketch/test/build/compile_commands.json /sketch/test/ && \
+			nvim \
+		"
 .PHONY: vim

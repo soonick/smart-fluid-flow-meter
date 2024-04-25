@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
 RUN apt-get update && \
-  apt-get install curl clang-format build-essential git tree -y
+  apt-get install curl clang-format build-essential git tree ripgrep -y
 
 # Install Arduino CLI
 RUN mkdir /arduino-cli
@@ -19,13 +19,8 @@ RUN curl -L https://github.com/Kitware/CMake/releases/download/v3.29.2/cmake-3.2
 RUN tar -xvzf cmake.tar.gz
 ENV PATH="${PATH}:/cmake/cmake-3.29.2-linux-x86_64/bin"
 
-# HACK: CMake regex doesn't support non-greedy syntax. This modifies the
-# recipe.size.regex so CMake can use it (I'm not 100% sure my changes don't break
-# something)
-RUN sed -i 's/^recipe.size.regex=.*$/recipe.size.regex=^(?:\\.data|\\.text|\\.rodata)\\S*\\s+([0-9]+).*/g' /root/.arduino15/packages/arduino/hardware/renesas_uno/1.1.0/platform.txt
-
 # Add Arduino Toolchain
 WORKDIR /sketch
 RUN git clone https://github.com/technyon/Arduino-CMake-Toolchain.git
 WORKDIR /sketch/Arduino-CMake-Toolchain
-RUN git checkout 39d120027f82b63d03274c4c429e289729a389f6
+RUN git checkout 3c624d2e5f8745251fddb1526de068bab56d7c0e

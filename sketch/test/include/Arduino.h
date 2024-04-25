@@ -12,10 +12,13 @@ typedef std::string String;
 
 void delay(int);
 
+#include "WiFiS3.h"
+class IPAddress;
 class HardwareSerial {
  public:
   void print(String);
   void println(String);
+  void println(IPAddress);
 };
 
 extern HardwareSerial Serial;

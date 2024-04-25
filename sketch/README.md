@@ -6,6 +6,14 @@ Reads measurements from [YF-S201](http://www.mantech.co.za/datasheets/products/y
 
 Currently only tested with [Arduino UNO R4 WiFi](https://store.arduino.cc/products/uno-r4-wifi).
 
+## Dependencies
+
+This repo uses submodules for its dependencies. To fetch all submodules:
+
+```
+git submodule update --init --recursive
+```
+
 ## Compile
 
 To generate a docker image and build the code:

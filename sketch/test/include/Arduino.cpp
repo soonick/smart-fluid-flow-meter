@@ -9,5 +9,8 @@ void HardwareSerial::print(String a) {
 void HardwareSerial::println(String a) {
   std::cout << a;
 }
+void HardwareSerial::println(IPAddress a) {
+  std::cout << &a;
+}
 
 HardwareSerial Serial;
