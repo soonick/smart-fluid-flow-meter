@@ -24,10 +24,6 @@ ENV PATH="${PATH}:/cmake/cmake-3.29.2-linux-x86_64/bin"
 # something)
 RUN sed -i 's/^recipe.size.regex=.*$/recipe.size.regex=^(?:\\.data|\\.text|\\.rodata)\\S*\\s+([0-9]+).*/g' /root/.arduino15/packages/arduino/hardware/renesas_uno/1.1.0/platform.txt
 
-# Add code to image
-COPY CMakeLists.txt /sketch/CMakeLists.txt
-COPY src /sketch/src
-
 # Add Arduino Toolchain
 WORKDIR /sketch
 RUN git clone https://github.com/technyon/Arduino-CMake-Toolchain.git
