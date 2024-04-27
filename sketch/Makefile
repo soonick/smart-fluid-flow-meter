@@ -3,7 +3,7 @@ build:
 .PHONY: build
 
 upload:
-	@docker run --rm -v $(PWD)/:/sketch/ -w /sketch/ --device /dev/ttyACM0:/dev/ttyACM0 smart-fluid-flow-meter-sketch-image arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:renesas_uno:unor4wifi .
+	@docker run --rm -v $(PWD)/:/sketch/ -w /sketch/ --device /dev/ttyACM0:/dev/ttyACM0 smart-fluid-flow-meter-sketch-image make -f ArduinoMakefile upload
 .PHONY: upload
 
 serial:
@@ -19,7 +19,7 @@ format:
 .PHONY: format
 
 check-format:
-	@docker run --rm -it -v $(PWD)/:/sketch/ -w /sketch/ smart-fluid-flow-meter-sketch-image clang-format *.ino -style=Chromium --dry-run -Werror
+	@docker run --rm -it -v $(PWD)/:/sketch/ -w /sketch/ smart-fluid-flow-meter-sketch-image clang-format *.cpp -style=Chromium --dry-run -Werror
 .PHONY: check-format
 
 verify: build check-format

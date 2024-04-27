@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
 RUN apt-get update && \
-  apt-get install curl clang-format -y
+  apt-get install curl clang-format build-essential -y
 
 # Install Arduino CLI
 RUN mkdir /arduino-cli
@@ -13,7 +13,7 @@ ENV PATH="${PATH}:/arduino-cli/bin"
 RUN arduino-cli core install arduino:renesas_uno
 
 # Compile code
-COPY sketch.ino /sketch/sketch.ino
-COPY sketch.yaml /sketch/sketch.yaml
+COPY ArduinoMakefile /sketch/ArduinoMakefile
+COPY main.cpp /sketch/main.cpp
 WORKDIR /sketch
-RUN arduino-cli compile --fqbn arduino:renesas_uno:unor4wifi .
+RUN make -f ArduinoMakefile

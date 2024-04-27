@@ -4,32 +4,6 @@ char ssid[] = "ssid";
 char pass[] = "pass";
 int status = WL_IDLE_STATUS;
 
-void setup() {
-  Serial.begin(9600);
-
-  WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
-  WiFi.setHostname("smart-water-meter");
-
-  // attempt to connect to Wifi network:
-  while (status != WL_CONNECTED) {
-    Serial.print("Attempting to connect to WPA SSID: ");
-    Serial.println(ssid);
-
-    status = WiFi.begin(ssid, pass);
-
-    // Allow some time for the connection
-    delay(3000);
-  }
-
-  Serial.print("You're connected to the network");
-}
-
-void loop() {
-  printCurrentNet();
-  printWifiData();
-  delay(10000);
-}
-
 void printWifiData() {
   IPAddress ip = WiFi.localIP();
 
@@ -81,4 +55,30 @@ void printCurrentNet() {
   Serial.print("Encryption Type:");
   Serial.println(encryption, HEX);
   Serial.println();
+}
+
+void setup() {
+  Serial.begin(9600);
+
+  WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
+  WiFi.setHostname("smart-water-meter");
+
+  // attempt to connect to Wifi network:
+  while (status != WL_CONNECTED) {
+    Serial.print("Attempting to connect to WPA SSID: ");
+    Serial.println(ssid);
+
+    status = WiFi.begin(ssid, pass);
+
+    // Allow some time for the connection
+    delay(3000);
+  }
+
+  Serial.print("You're connected to the network");
+}
+
+void loop() {
+  printCurrentNet();
+  printWifiData();
+  delay(10000);
 }
