@@ -13,7 +13,6 @@ ENV PATH="${PATH}:/arduino-cli/bin"
 RUN arduino-cli core install arduino:renesas_uno
 
 # Compile code
-COPY ArduinoMakefile /sketch/ArduinoMakefile
-COPY main.cpp /sketch/main.cpp
+COPY src /sketch
 WORKDIR /sketch
-RUN make -f ArduinoMakefile
+RUN make

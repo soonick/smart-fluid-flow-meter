@@ -3,7 +3,7 @@ build:
 .PHONY: build
 
 upload:
-	@docker run --rm --device /dev/ttyACM0:/dev/ttyACM0 smart-fluid-flow-meter-sketch-image make -f ArduinoMakefile upload
+	@docker run --rm --device /dev/ttyACM0:/dev/ttyACM0 smart-fluid-flow-meter-sketch-image make upload
 .PHONY: upload
 
 serial:
