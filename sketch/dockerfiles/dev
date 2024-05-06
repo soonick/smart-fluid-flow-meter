@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
 RUN apt-get update && \
-  apt-get install curl clang-format build-essential -y
+  apt-get install curl clang-format build-essential git -y
 
 # Install Arduino CLI
 RUN mkdir /arduino-cli
@@ -12,7 +12,31 @@ ENV PATH="${PATH}:/arduino-cli/bin"
 # Install required platforms
 RUN arduino-cli core install arduino:renesas_uno
 
-# Compile code
-COPY src /sketch
+# Install CMake
+RUN mkdir /cmake
+WORKDIR /cmake
+RUN curl -L https://github.com/Kitware/CMake/releases/download/v3.29.2/cmake-3.29.2-linux-x86_64.tar.gz > cmake.tar.gz
+RUN tar -xvzf cmake.tar.gz
+ENV PATH="${PATH}:/cmake/cmake-3.29.2-linux-x86_64/bin"
+
+# HACK: CMake regex doesn't support non-greedy syntax. This modifies the
+# recipe.size.regex so CMake can use it (I'm not 100% sure my changes don't break
+# something)
+RUN sed -i 's/^recipe.size.regex=.*$/recipe.size.regex=^(?:\\.data|\\.text|\\.rodata)\\S*\\s+([0-9]+).*/g' /root/.arduino15/packages/arduino/hardware/renesas_uno/1.1.0/platform.txt
+
+# Add code to image
+COPY CMakeLists.txt /sketch/CMakeLists.txt
+COPY src /sketch/src
 WORKDIR /sketch
+
+# Add Arduino Toolchain
+WORKDIR /sketch
+RUN git clone https://github.com/technyon/Arduino-CMake-Toolchain.git
+WORKDIR /sketch/Arduino-CMake-Toolchain
+RUN git checkout 39d120027f82b63d03274c4c429e289729a389f6
+
+# Compile code
+WORKDIR /sketch/build
+RUN echo 'set(ARDUINO_BOARD "Arduino UNO R4 WiFi [renesas_uno.unor4wifi]")' >> BoardOptions.cmake
+RUN cmake -D CMAKE_TOOLCHAIN_FILE=Arduino-CMake-Toolchain/Arduino-toolchain.cmake -D ARDUINO_INSTALL_PATH=/root/.arduino15 -D ARDUINO_ENABLE_PACKAGE_MANAGER=ON -DARDUINO_PLATFORM=arduino.renesas_uno ..
 RUN make

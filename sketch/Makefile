@@ -3,7 +3,7 @@ build:
 .PHONY: build
 
 upload:
-	@docker run --rm --device /dev/ttyACM0:/dev/ttyACM0 smart-fluid-flow-meter-sketch-image make upload
+	@docker run --rm --device /dev/ttyACM0:/dev/ttyACM0 -w /sketch/build/ smart-fluid-flow-meter-sketch-image sh -c "stty -F /dev/ttyACM0 1200 && /root/.arduino15/packages/arduino/tools/bossac/1.9.1-arduino5/bossac -a -d --port=ttyACM0 -U -e -w 'main.bin' -R"
 .PHONY: upload
 
 serial:
@@ -11,7 +11,7 @@ serial:
 .PHONY: serial
 
 ssh:
-	@docker run --rm -it -v $(PWD)/src/:/sketch/ -w /sketch/ smart-fluid-flow-meter-sketch-image bash
+	@docker run --rm -it -v $(PWD)/src/:/sketch/src -w /sketch/ smart-fluid-flow-meter-sketch-image bash
 .PHONY: ssh
 
 format:
