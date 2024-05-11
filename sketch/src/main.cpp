@@ -1,4 +1,5 @@
 #include <WiFi.h>
+#include "Arduino.h"
 
 char ssid[] = "ssid";
 char pass[] = "pass";
