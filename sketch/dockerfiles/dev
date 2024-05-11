@@ -33,14 +33,3 @@ WORKDIR /sketch
 RUN git clone https://github.com/technyon/Arduino-CMake-Toolchain.git
 WORKDIR /sketch/Arduino-CMake-Toolchain
 RUN git checkout 39d120027f82b63d03274c4c429e289729a389f6
-
-# Compile code
-WORKDIR /sketch/build
-RUN echo 'set(ARDUINO_BOARD "Arduino UNO R4 WiFi [renesas_uno.unor4wifi]")' >> BoardOptions.cmake
-RUN cmake -D CMAKE_EXPORT_COMPILE_COMMANDS=1 \
-  -D CMAKE_TOOLCHAIN_FILE=Arduino-CMake-Toolchain/Arduino-toolchain.cmake \
-  -D ARDUINO_INSTALL_PATH=/root/.arduino15 \
-  -D ARDUINO_ENABLE_PACKAGE_MANAGER=ON \
-  -D ARDUINO_PLATFORM=arduino.renesas_uno ..
-RUN ln -s /sketch/build/compile_commands.json /sketch/
-RUN make
