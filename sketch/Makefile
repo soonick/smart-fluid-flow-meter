@@ -18,7 +18,6 @@ build: image
 				-D ARDUINO_ENABLE_PACKAGE_MANAGER=ON \
 				-D ARDUINO_PLATFORM=arduino.renesas_uno .. && \
 			rm -f /sketch/compile_commands.json && \
-			ln -s /sketch/build/compile_commands.json /sketch/ && \
 			make \
 		"
 .PHONY: build
@@ -67,6 +66,7 @@ verify: image build check-format
 vim: image
 	@docker build -f dockerfiles/dev-vim -t smart-fluid-flow-meter-sketch-dev-vim-image .
 	@docker run --rm -it \
+		-v $(PWD)/build:/sketch/build \
 		-v $(PWD)/CMakeLists.txt:/sketch/CMakeLists.txt \
 		-v $(PWD)/README.md:/sketch/README.md \
 		-v $(PWD)/Makefile:/sketch/Makefile \
@@ -75,5 +75,5 @@ vim: image
 		-v $(PWD)/dev-environments/vim/tmp:/root/.local/share/nvim \
 		-w /sketch/ \
 		smart-fluid-flow-meter-sketch-dev-vim-image \
-		nvim
+		sh -c "ln -s /sketch/build/compile_commands.json /sketch/ && nvim"
 .PHONY: vim
