@@ -1,7 +1,10 @@
 #include <r4-wifi-manager/r4-wifi-manager.hpp>
 #include "Arduino.h"
+#include "Hashtable.h"
 
 R4WifiManager wifiManager;
+
+Hashtable<String, String>* userConfig = nullptr;
 
 void setup() {
   Serial.begin(9600);
@@ -17,5 +20,7 @@ void setup() {
 }
 
 void loop() {
-  // wifiManager.listen();
+  if (userConfig == nullptr) {
+    userConfig = wifiManager.getUserConfig();
+  }
 }

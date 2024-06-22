@@ -134,7 +134,6 @@ vim: cmake cmake_test
 		-v $(PWD)/CMakeLists.txt:/sketch/CMakeLists.txt \
 		-v $(PWD)/Makefile:/sketch/Makefile \
 		-v $(PWD)/README.md:/sketch/README.md \
-		-v $(PWD)/assets:/sketch/assets \
 		-v $(PWD)/build:/sketch/build \
 		-v $(PWD)/deps:/sketch/deps \
 		-v $(PWD)/dev-environments/vim/tmp:/root/.local/share/nvim \
