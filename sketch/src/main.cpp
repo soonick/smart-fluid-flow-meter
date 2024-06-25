@@ -2,9 +2,8 @@
 #include "Arduino.h"
 #include "Hashtable.h"
 
+Hashtable<String, String> userConfig;
 R4WifiManager wifiManager;
-
-Hashtable<String, String>* userConfig = nullptr;
 
 void setup() {
   Serial.begin(9600);
@@ -20,7 +19,7 @@ void setup() {
 }
 
 void loop() {
-  if (userConfig == nullptr) {
+  if (userConfig.elements() != 3) {
     userConfig = wifiManager.getUserConfig();
   }
 }
