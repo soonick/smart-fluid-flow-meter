@@ -2,16 +2,30 @@
 #include <r4-wifi-manager/r4-wifi-manager.hpp>
 #include "Arduino.h"
 #include "Hashtable.h"
+#include "button.h"
+
+#define RESET_PIN 2
 
 Hashtable<String, String> userConfig;
 R4WifiManager wifiManager;
 bool apStarted = false;
+Button resetButton = Button(RESET_PIN);
 
 void setup() {
   Serial.begin(9600);
+  pinMode(RESET_PIN, INPUT_PULLUP);
 }
 
-void loop() {
+void reset() {
+  if (resetButton.isLongPressed(5000)) {
+    Serial.println("Resetting meter");
+    wifiManager.reset();
+    apStarted = false;
+    userConfig = Hashtable<String, String>();
+  }
+}
+
+void ap() {
   if (userConfig.elements() != 3) {
     userConfig = wifiManager.getUserConfig();
 
@@ -27,6 +41,13 @@ void loop() {
           delay(1000);
         }
       }
+
+      apStarted = true;
     }
   }
+}
+
+void loop() {
+  reset();
+  ap();
 }
