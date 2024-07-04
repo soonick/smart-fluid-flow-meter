@@ -9,6 +9,7 @@
 Hashtable<String, String> userConfig;
 R4WifiManager wifiManager;
 bool apStarted = false;
+bool connectedToWifi = false;
 Button resetButton = Button(RESET_PIN);
 
 void setup() {
@@ -21,6 +22,7 @@ void reset() {
     Serial.println("Resetting meter");
     wifiManager.reset();
     apStarted = false;
+    connectedToWifi = false;
     userConfig = Hashtable<String, String>();
   }
 }
@@ -32,6 +34,7 @@ void ap() {
     // If userConfig wasn't retrieved from eeprom and AP hasn't been already
     // started, try to start it
     if (userConfig.elements() != 3 && !apStarted) {
+      Serial.println("Starting AP");
       String error = wifiManager.startAp("my-arduino", "12345678",
                                          IPAddress(192, 48, 56, 2));
       if (!error.isEmpty()) {
@@ -44,10 +47,33 @@ void ap() {
 
       apStarted = true;
     }
+
+    if (userConfig.elements() == 3) {
+      wifiManager.disconnect();
+      apStarted = false;
+    }
+  }
+}
+
+void connectToWifi() {
+  if (userConfig.elements() == 3 && !connectedToWifi) {
+    Serial.println("Connecting to Wifi");
+    String err = wifiManager.connect(
+        *userConfig.get(R4WifiManagerConstants::NETWORK_KEY),
+        *userConfig.get(R4WifiManagerConstants::PASSWORD_KEY));
+    if (!err.isEmpty()) {
+      while (true) {
+        Serial.println(err);
+        delay(1000);
+      }
+    }
+
+    connectedToWifi = true;
   }
 }
 
 void loop() {
   reset();
   ap();
+  connectToWifi();
 }
