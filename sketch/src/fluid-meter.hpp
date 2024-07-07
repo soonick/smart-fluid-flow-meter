@@ -27,6 +27,7 @@ class FluidMeter {
   const int meterPin;
   const float conversionFactor;
 
+  static FluidMeter* instance;
   static volatile int totalPulses;
 
   FluidMeter(const int pin);

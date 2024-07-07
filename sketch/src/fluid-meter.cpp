@@ -2,13 +2,18 @@
 #include "Arduino.h"
 
 volatile int FluidMeter::totalPulses = 0;
+FluidMeter* FluidMeter::instance = nullptr;
 
 FluidMeter::FluidMeter(const int pin) : meterPin{pin}, conversionFactor{450} {
   attachInterrupt(digitalPinToInterrupt(2), this->countPulses, RISING);
 }
 
 FluidMeter* FluidMeter::getInstance(const int pin) {
-  return new FluidMeter(pin);
+  if (FluidMeter::instance == nullptr) {
+    FluidMeter::instance = new FluidMeter(pin);
+  }
+
+  return FluidMeter::instance;
 }
 
 void FluidMeter::countPulses() {
