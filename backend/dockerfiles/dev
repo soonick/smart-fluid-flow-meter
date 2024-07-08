@@ -4,9 +4,9 @@ RUN apt-get update && rustup component add rustfmt
 
 EXPOSE 3000
 
-COPY service-account-key.json /service-account-key.json
-
-COPY . /smart-fluid-flow-meter/
+COPY ./src /smart-fluid-flow-meter/src
+COPY ./Cargo.toml /smart-fluid-flow-meter/Cargo.toml
+COPY ./Cargo.lock /smart-fluid-flow-meter/Cargo.lock
 WORKDIR /smart-fluid-flow-meter/
 
 RUN cargo fetch

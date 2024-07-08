@@ -15,8 +15,23 @@ services:
         condition: service_healthy
     volumes:
       - type: bind
-        source: ../
-        target: /smart-fluid-flow-meter/
+        source: ../src
+        target: /smart-fluid-flow-meter/src
+      - type: bind
+        source: ../tests
+        target: /smart-fluid-flow-meter/tests
+      - type: bind
+        source: ../Cargo.toml
+        target: /smart-fluid-flow-meter/Cargo.toml
+      - type: bind
+        source: ../Cargo.lock
+        target: /smart-fluid-flow-meter/Cargo.lock
+      - type: bind
+        source: ../service-account-key.json
+        target: /service-account-key.json
+      - type: bind
+        source: ../settings
+        target: /smart-fluid-flow-meter/settings
     command: >
       sh -c "cargo test -- --nocapture"
 
