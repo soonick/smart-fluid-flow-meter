@@ -47,7 +47,7 @@ start-prod:
 start-mysql:
 	@docker compose -f dockerfiles/docker-compose-mysql.yaml down --remove-orphans
 	@docker compose -f dockerfiles/docker-compose-mysql.yaml up --build --abort-on-container-exit
-.PHONY: test
+.PHONY: start-mysql
 
 test:
 	@docker compose -f dockerfiles/docker-compose-test.yaml down --remove-orphans

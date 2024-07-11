@@ -1,4 +1,4 @@
-use config::{Config, Environment, File};
+use config::{Config, Environment};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -31,11 +31,9 @@ pub struct Settings {
 impl Settings {
     pub fn new() -> Self {
         let s = match Config::builder()
-            // Add in `config/default.toml`
-            .add_source(File::with_name("settings/default"))
             // Add in settings from the environment (with a prefix of APP)
             // Eg.. `APP_DEBUG=1` would set the `debug` key
-            .add_source(Environment::with_prefix("APP"))
+            .add_source(Environment::with_prefix("APP").separator("__"))
             .build()
         {
             Ok(s) => s,

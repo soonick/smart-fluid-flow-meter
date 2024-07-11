@@ -5,6 +5,7 @@ services:
     build:
       dockerfile: dockerfiles/dev
       context: ../
+    env_file: "../.env.sample"
     environment:
       FIRESTORE_EMULATOR_HOST: 'firestore:8200'
       GOOGLE_APPLICATION_CREDENTIALS: "/service-account-key.json"
@@ -29,9 +30,6 @@ services:
       - type: bind
         source: ../service-account-key.json
         target: /service-account-key.json
-      - type: bind
-        source: ../settings
-        target: /smart-fluid-flow-meter/settings
     command: >
       sh -c "cargo test -- --nocapture"
 

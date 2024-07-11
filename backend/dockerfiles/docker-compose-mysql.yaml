@@ -2,19 +2,33 @@ version: "3.8"
 
 services:
   smart-fluid-flow-meter-backend:
+    env_file: "../.env.sample"
     build:
       dockerfile: dockerfiles/dev
       context: ../
     environment:
       FIRESTORE_EMULATOR_HOST: 'firestore:8200'
       GOOGLE_APPLICATION_CREDENTIALS: "/service-account-key.json"
+      ADRIAN: "good"
     depends_on:
       mysql:
         condition: service_healthy
     volumes:
       - type: bind
-        source: ../
-        target: /smart-fluid-flow-meter/
+        source: ../src
+        target: /smart-fluid-flow-meter/src
+      - type: bind
+        source: ../tests
+        target: /smart-fluid-flow-meter/tests
+      - type: bind
+        source: ../Cargo.toml
+        target: /smart-fluid-flow-meter/Cargo.toml
+      - type: bind
+        source: ../Cargo.lock
+        target: /smart-fluid-flow-meter/Cargo.lock
+      - type: bind
+        source: ../target
+        target: /smart-fluid-flow-meter/target
     ports:
       - '3000:3000'
     expose:
