@@ -5,6 +5,7 @@ use async_trait::async_trait;
 use sqlx::mysql::{MySql, MySqlPoolOptions};
 use sqlx::Pool;
 use tracing::error;
+use tracing::info;
 
 #[derive(Clone)]
 pub struct MySqlStorage {
@@ -23,6 +24,11 @@ impl MySqlStorage {
                 "Unable to create MySql connection pool using {}. Error: {}",
                 connection_string, err
             ),
+        };
+
+        match sqlx::migrate!("assets/db-migrations").run(&pool).await {
+            Ok(()) => info!("DB migrations ran successfully"),
+            Err(err) => panic!("Unable to run MySql migrations. Error: {}", err),
         };
 
         return MySqlStorage { pool };

@@ -4,10 +4,11 @@ RUN apt-get update && rustup component add rustfmt
 
 EXPOSE 3000
 
+RUN cargo install cargo-watch
+
+COPY ./assets /smart-fluid-flow-meter/assets
 COPY ./src /smart-fluid-flow-meter/src
 COPY ./Cargo.toml /smart-fluid-flow-meter/Cargo.toml
 COPY ./Cargo.lock /smart-fluid-flow-meter/Cargo.lock
-WORKDIR /smart-fluid-flow-meter/
 
-RUN cargo fetch
-RUN cargo install cargo-watch
+WORKDIR /smart-fluid-flow-meter/

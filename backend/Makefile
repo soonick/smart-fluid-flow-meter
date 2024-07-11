@@ -1,16 +1,19 @@
 build:
+	@mkdir -p build/target
+	@mkdir -p build/registry
 	@docker build -f dockerfiles/dev -t smart-fluid-flow-meter-backend-image .
-	@docker run --rm \
-		-v $(PWD)/Cargo.lock:/smart-fluid-flow-meter/Cargo.lock \
-		-v $(PWD)/Cargo.toml:/smart-fluid-flow-meter/Cargo.toml \
-		-v $(PWD)/src:/smart-fluid-flow-meter/src \
-		-v $(PWD)/target:/smart-fluid-flow-meter/target \
-		-w /smart-fluid-flow-meter/ \
-		smart-fluid-flow-meter-backend-image \
-		cargo build --release
 .PHONY: build
 
 build-prod: build
+	@docker run --rm \
+		-v $(PWD)/Cargo.lock:/smart-fluid-flow-meter/Cargo.lock \
+		-v $(PWD)/Cargo.toml:/smart-fluid-flow-meter/Cargo.toml \
+		-v $(PWD)/assets/:/assets \
+		-v $(PWD)/build/target:/smart-fluid-flow-meter/target \
+		-v $(PWD)/src:/smart-fluid-flow-meter/src \
+		-w /smart-fluid-flow-meter/ \
+		smart-fluid-flow-meter-backend-image \
+		cargo build --release
 	@docker build -f dockerfiles/prod -t smart-fluid-flow-meter-backend-image-prod .
 .PHONY: build-prod
 
@@ -29,6 +32,9 @@ start:
 	@docker run --rm -it -p 3000:3000 \
 		-v $(PWD)/Cargo.lock:/smart-fluid-flow-meter/Cargo.lock \
 		-v $(PWD)/Cargo.toml:/smart-fluid-flow-meter/Cargo.toml \
+		-v $(PWD)/assets/:/assets \
+		-v $(PWD)/build/registry:/usr/local/cargo/registry \
+		-v $(PWD)/build/target:/smart-fluid-flow-meter/target \
 		-v $(PWD)/src:/smart-fluid-flow-meter/src \
 		-w /smart-fluid-flow-meter/ \
 		--name smart-fluid-flow-meter-backend-dev \
@@ -38,7 +44,6 @@ start:
 
 start-prod:
 	@docker run --rm -it -p 3000:3000 \
-		-v $(PWD)/settings:/settings \
 		--name smart-fluid-flow-meter-backend-prod \
 		smart-fluid-flow-meter-backend-image-prod \
 		./smart_fluid_flow_meter_backend
