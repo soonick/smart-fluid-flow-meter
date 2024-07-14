@@ -43,14 +43,8 @@ workflows:
   version: 2
   test_and_publish:
     jobs:
-      - backend:
-          filters:
-            branches:
-              only: master
-      - sketch:
-          filters:
-            branches:
-              only: master
+      - backend
+      - sketch
       - tag:
           requires:
             - backend
