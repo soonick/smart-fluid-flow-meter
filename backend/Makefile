@@ -36,14 +36,18 @@ start:
 		-v $(PWD)/build/registry:/usr/local/cargo/registry \
 		-v $(PWD)/build/target:/smart-fluid-flow-meter/target \
 		-v $(PWD)/src:/smart-fluid-flow-meter/src \
+		--env-file .env \
 		-w /smart-fluid-flow-meter/ \
 		--name smart-fluid-flow-meter-backend-dev \
 		smart-fluid-flow-meter-backend-image \
 		cargo run
 .PHONY: start
 
-start-prod:
+start-prod: build-prod
 	@docker run --rm -it -p 3000:3000 \
+		-e GOOGLE_APPLICATION_CREDENTIALS=/service-account-key.json \
+		--env-file .env \
+		-v $(PWD)/service-account-key.json:/service-account-key.json \
 		--name smart-fluid-flow-meter-backend-prod \
 		smart-fluid-flow-meter-backend-image-prod \
 		./smart_fluid_flow_meter_backend

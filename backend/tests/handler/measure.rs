@@ -190,7 +190,7 @@ async fn save_measure_success_mysql() {
 
 #[test(tokio::test)]
 async fn save_measure_success_firestore() {
-    let storage = Arc::new(FirestoreStorage::new("dummy-id").await);
+    let storage = Arc::new(FirestoreStorage::new("dummy-id", "db-id").await);
     let app = smart_fluid_flow_meter_backend::app(storage).await;
 
     let input = SaveMeasureInput {

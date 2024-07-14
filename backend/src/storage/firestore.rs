@@ -3,6 +3,7 @@ use crate::storage::{error::Error, error::ErrorCode, Storage};
 
 use async_trait::async_trait;
 use firestore::FirestoreDb;
+use firestore::FirestoreDbOptions;
 use tracing::error;
 
 const MEASURE_COLLECTION: &'static str = "measure";
@@ -13,8 +14,13 @@ pub struct FirestoreStorage {
 }
 
 impl FirestoreStorage {
-    pub async fn new(project_id: &str) -> FirestoreStorage {
-        let db = match FirestoreDb::new(project_id).await {
+    pub async fn new(project_id: &str, database_id: &str) -> FirestoreStorage {
+        let db = match FirestoreDb::with_options(
+            FirestoreDbOptions::new(project_id.to_string())
+                .with_database_id(database_id.to_string()),
+        )
+        .await
+        {
             Ok(db) => db,
             Err(err) => panic!(
                 "Unable create firestore db for project: {}. Error: {}",

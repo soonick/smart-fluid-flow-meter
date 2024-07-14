@@ -17,7 +17,13 @@ async fn main() {
     let settings = Settings::new();
 
     let storage: Arc<dyn Storage> = if !settings.database.firestore.project_id.is_empty() {
-        Arc::new(FirestoreStorage::new(&settings.database.firestore.project_id).await)
+        Arc::new(
+            FirestoreStorage::new(
+                &settings.database.firestore.project_id,
+                &settings.database.firestore.database_id,
+            )
+            .await,
+        )
     } else {
         Arc::new(MySqlStorage::new(&settings.database.mysql.connection_string).await)
     };

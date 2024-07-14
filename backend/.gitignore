@@ -1,2 +1,3 @@
 /build
 service-account-key.json
+.env
