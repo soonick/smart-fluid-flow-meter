@@ -9,7 +9,6 @@ services:
     environment:
       FIRESTORE_EMULATOR_HOST: 'firestore:8200'
       GOOGLE_APPLICATION_CREDENTIALS: "/service-account-key.json"
-      ADRIAN: "good"
     depends_on:
       mysql:
         condition: service_healthy

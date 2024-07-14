@@ -5,10 +5,11 @@ mod json;
 pub mod settings;
 pub mod storage;
 
+use crate::handler::health::health_check;
 use crate::handler::measure::save_measure;
 use crate::storage::Storage;
 
-use axum::{extract::FromRef, routing::post, Router};
+use axum::{extract::FromRef, routing::get, routing::post, Router};
 use std::sync::Arc;
 use tower_http::trace::{self, TraceLayer};
 use tracing::Level;
@@ -22,6 +23,7 @@ pub async fn app(storage: Arc<dyn Storage>) -> Router {
     let state = AppState { storage };
     Router::new()
         .route("/measure", post(save_measure))
+        .route("/health", get(health_check))
         .with_state(state)
         .layer(
             TraceLayer::new_for_http()
