@@ -10,7 +10,7 @@ pub async fn save_measure(
     Extractor(input): Extractor<SaveMeasureInput>,
 ) -> Result<Extractor<Measure>, AppError> {
     let measure = Measure {
-        id: "".to_string(),
+        id: None,
         device_id: input.device_id,
         measure: input.measure,
         recorded_at: input.recorded_at,

@@ -3,6 +3,7 @@ use axum::{
     http,
     http::{Request, StatusCode},
 };
+use chrono::format::SecondsFormat;
 use chrono::Local;
 use http_body_util::BodyExt;
 use serde_json::{json, Value};
@@ -67,7 +68,7 @@ async fn save_measure_success() {
 
     let body = response.into_body().collect().await.unwrap().to_bytes();
     let expected = Measure {
-        id: input.recorded_at.to_string(),
+        id: Some(input.recorded_at.to_string()),
         device_id: input.device_id.to_string(),
         measure: input.measure.to_string(),
         recorded_at: input.recorded_at,
@@ -179,7 +180,7 @@ async fn save_measure_success_mysql() {
 
     let body = response.into_body().collect().await.unwrap().to_bytes();
     let expected = Measure {
-        id: "1".to_string(),
+        id: Some("1".to_string()),
         device_id: input.device_id.to_string(),
         measure: input.measure.to_string(),
         recorded_at: input.recorded_at,
@@ -213,12 +214,20 @@ async fn save_measure_success_firestore() {
     assert_eq!(response.status(), StatusCode::OK);
 
     let body = response.into_body().collect().await.unwrap().to_bytes();
-    let expected = Measure {
-        id: "".to_string(),
-        device_id: input.device_id.to_string(),
-        measure: input.measure.to_string(),
-        recorded_at: input.recorded_at,
-    };
     let body: Value = serde_json::from_slice(&body).unwrap();
-    assert_eq!(body, serde_json::to_value(expected).unwrap());
+    assert_ne!(body.get("id").unwrap().as_str().unwrap(), "");
+    assert_eq!(
+        body.get("device_id").unwrap().as_str().unwrap(),
+        input.device_id
+    );
+    assert_eq!(
+        body.get("measure").unwrap().as_str().unwrap(),
+        input.measure
+    );
+    assert_eq!(
+        body.get("recorded_at").unwrap().as_str().unwrap(),
+        input
+            .recorded_at
+            .to_rfc3339_opts(SecondsFormat::Nanos, true)
+    );
 }
