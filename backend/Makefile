@@ -58,6 +58,23 @@ start-mysql:
 	@docker compose -f dockerfiles/docker-compose-mysql.yaml up --build --abort-on-container-exit
 .PHONY: start-mysql
 
+# Starts a container with a neovim development environment ready to use
+vim:
+	@docker build -f dockerfiles/dev-vim -t smart-fluid-flow-meter-backend-vim-image .
+	@docker run --rm -it \
+		-v $(PWD)/Makefile:/backend/Makefile \
+		-v $(PWD)/README.md:/backend/README.md \
+		-v $(PWD)/build:/backend/build \
+		-v $(PWD)/assets:/backend/assets \
+		-v $(PWD)/dockerfile:/backend/dockerfiles \
+		-v $(PWD)/src:/backend/src \
+		-v $(PWD)/tests:/backend/tests \
+		-v $(PWD)/dev-environments/vim/tmp:/root/.local/share/nvim \
+		-w /backend/ \
+		smart-fluid-flow-meter-backend-vim-image \
+		sh -c "nvim"
+.PHONY: vim
+
 test:
 	@docker compose -f dockerfiles/docker-compose-test.yaml down --remove-orphans
 	@docker compose -f dockerfiles/docker-compose-test.yaml up --build \
