@@ -58,7 +58,7 @@ impl Storage for MySqlStorage {
         };
 
         Ok(Measure {
-            id: inserted.last_insert_id().to_string(),
+            id: Some(inserted.last_insert_id().to_string()),
             ..measure
         })
     }

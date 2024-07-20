@@ -32,7 +32,7 @@ impl Storage for MemoryStorage {
     // Uses recorded_at as id
     async fn save_measure(&self, measure: Measure) -> Result<Measure, Error> {
         let new_measure = Measure {
-            id: measure.recorded_at.to_string(),
+            id: Some(measure.recorded_at.to_string()),
             ..measure
         };
 
@@ -41,7 +41,8 @@ impl Storage for MemoryStorage {
             // Fail if there is already a record with that ID
             {
                 let measures = m.lock().unwrap();
-                if measures.contains_key(&new_measure.id) {
+                let id = new_measure.id.clone().unwrap();
+                if measures.contains_key(&id) {
                     return Err(Error {
                         code: ErrorCode::UndefinedError,
                     });
@@ -50,7 +51,7 @@ impl Storage for MemoryStorage {
 
             {
                 let mut measures = m.lock().unwrap();
-                measures.insert(new_measure.id.clone(), new_measure.clone());
+                measures.insert(new_measure.id.clone().unwrap(), new_measure.clone());
             }
         }
 

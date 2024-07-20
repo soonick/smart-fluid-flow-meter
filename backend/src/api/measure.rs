@@ -10,7 +10,8 @@ pub struct SaveMeasureInput {
 
 #[derive(Clone, Deserialize, Serialize)]
 pub struct Measure {
-    pub id: String,
+    #[serde(alias = "_firestore_id")]
+    pub id: Option<String>,
     pub device_id: String,
     pub measure: String,
     pub recorded_at: DateTime<Local>,
