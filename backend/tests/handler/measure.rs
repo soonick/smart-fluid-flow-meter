@@ -3,12 +3,11 @@ use axum::{
     http,
     http::{Request, StatusCode},
 };
-use chrono::format::SecondsFormat;
-use chrono::Local;
+use chrono::{DateTime, Local};
 use http_body_util::BodyExt;
 use serde_json::{json, Value};
 use smart_fluid_flow_meter_backend::{
-    api::measure::{Measure, SaveMeasureInput},
+    api::measure::SaveMeasureInput,
     storage::{firestore::FirestoreStorage, memory::MemoryStorage, mysql::MySqlStorage},
 };
 use std::sync::Arc;
@@ -50,7 +49,6 @@ async fn save_measure_success() {
     let input = SaveMeasureInput {
         device_id: "999".to_string(),
         measure: "134".to_string(),
-        recorded_at: Local::now(),
     };
     let response = app
         .oneshot(
@@ -67,43 +65,20 @@ async fn save_measure_success() {
     assert_eq!(response.status(), StatusCode::OK);
 
     let body = response.into_body().collect().await.unwrap().to_bytes();
-    let expected = Measure {
-        id: Some(input.recorded_at.to_string()),
-        device_id: input.device_id.to_string(),
-        measure: input.measure.to_string(),
-        recorded_at: input.recorded_at,
-    };
     let body: Value = serde_json::from_slice(&body).unwrap();
-    assert_eq!(body, serde_json::to_value(expected).unwrap());
-}
-
-#[tokio::test]
-async fn save_measure_invalid_date() {
-    let storage = Arc::new(MemoryStorage::new().await);
-    let app = smart_fluid_flow_meter_backend::app(storage).await;
-
-    let response = app
-        .oneshot(
-            Request::builder()
-                .method(http::Method::POST)
-                .uri("/measure")
-                .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
-                .body(Body::from(
-                    "{\"device_id\": \"1\", \"measure\": \"1\", \"recorded_at\":\"today\"}",
-                ))
-                .unwrap(),
-        )
-        .await
-        .unwrap();
-
-    assert_eq!(response.status(), StatusCode::UNPROCESSABLE_ENTITY);
-
-    let body = response.into_body().collect().await.unwrap().to_bytes();
-    let body: Value = serde_json::from_slice(&body).unwrap();
+    assert_eq!(body.get("id").unwrap().as_str().unwrap(), input.device_id);
     assert_eq!(
-        body,
-        json!({ "code": "InvalidInput", "message": "Invalid input" })
+        body.get("device_id").unwrap().as_str().unwrap(),
+        input.device_id
     );
+    assert_eq!(
+        body.get("measure").unwrap().as_str().unwrap(),
+        input.measure
+    );
+    let actual_date =
+        DateTime::parse_from_rfc3339(body.get("recorded_at").unwrap().as_str().unwrap())
+            .expect("Bad date");
+    assert!(Local::now().timestamp_nanos_opt() > actual_date.timestamp_nanos_opt());
 }
 
 #[tokio::test]
@@ -114,7 +89,6 @@ async fn save_measure_database_failure() {
     let input = SaveMeasureInput {
         device_id: "999".to_string(),
         measure: "134".to_string(),
-        recorded_at: Local::now(),
     };
     let response = app
         .clone()
@@ -162,7 +136,6 @@ async fn save_measure_success_mysql() {
     let input = SaveMeasureInput {
         device_id: "999".to_string(),
         measure: "134".to_string(),
-        recorded_at: Local::now(),
     };
     let response = app
         .oneshot(
@@ -179,14 +152,21 @@ async fn save_measure_success_mysql() {
     assert_eq!(response.status(), StatusCode::OK);
 
     let body = response.into_body().collect().await.unwrap().to_bytes();
-    let expected = Measure {
-        id: Some("1".to_string()),
-        device_id: input.device_id.to_string(),
-        measure: input.measure.to_string(),
-        recorded_at: input.recorded_at,
-    };
     let body: Value = serde_json::from_slice(&body).unwrap();
-    assert_eq!(body, serde_json::to_value(expected).unwrap());
+    assert_eq!(body.get("id").unwrap().as_str().unwrap(), "1");
+    assert_eq!(
+        body.get("device_id").unwrap().as_str().unwrap(),
+        input.device_id
+    );
+    assert_eq!(
+        body.get("measure").unwrap().as_str().unwrap(),
+        input.measure
+    );
+    let actual_date =
+        DateTime::parse_from_rfc3339(body.get("recorded_at").unwrap().as_str().unwrap());
+    assert!(
+        Local::now().timestamp_nanos_opt() > actual_date.expect("Bad date").timestamp_nanos_opt()
+    );
 }
 
 #[test(tokio::test)]
@@ -197,7 +177,6 @@ async fn save_measure_success_firestore() {
     let input = SaveMeasureInput {
         device_id: "999".to_string(),
         measure: "134".to_string(),
-        recorded_at: Local::now(),
     };
     let response = app
         .oneshot(
@@ -224,10 +203,9 @@ async fn save_measure_success_firestore() {
         body.get("measure").unwrap().as_str().unwrap(),
         input.measure
     );
-    assert_eq!(
-        body.get("recorded_at").unwrap().as_str().unwrap(),
-        input
-            .recorded_at
-            .to_rfc3339_opts(SecondsFormat::Nanos, true)
+    let actual_date =
+        DateTime::parse_from_rfc3339(body.get("recorded_at").unwrap().as_str().unwrap());
+    assert!(
+        Local::now().timestamp_nanos_opt() > actual_date.expect("Bad date").timestamp_nanos_opt()
     );
 }
