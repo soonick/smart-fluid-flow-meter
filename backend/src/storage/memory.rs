@@ -32,7 +32,7 @@ impl Storage for MemoryStorage {
     // Uses recorded_at as id
     async fn save_measure(&self, measure: Measure) -> Result<Measure, Error> {
         let new_measure = Measure {
-            id: Some(measure.recorded_at.to_string()),
+            id: Some(measure.device_id.clone()),
             ..measure
         };
 

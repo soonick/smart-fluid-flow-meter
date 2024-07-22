@@ -5,7 +5,6 @@ use serde::{Deserialize, Serialize};
 pub struct SaveMeasureInput {
     pub device_id: String,
     pub measure: String,
-    pub recorded_at: DateTime<Local>,
 }
 
 #[derive(Clone, Deserialize, Serialize)]
