@@ -4,12 +4,14 @@
 #include "Arduino.h"
 #include "Hashtable.h"
 #include "api/Common.h"
+#include "api/Compat.h"
 #include "backend-service.hpp"
 #include "button.hpp"
 #include "fluid-meter.hpp"
 
 #define RESET_PIN 7
 #define SENSOR_PIN 2
+#define LED_PIN 6
 
 const int MILLIS_BETWEEN_POSTS = 600'000;  // 10 minutes
 
@@ -33,6 +35,8 @@ void setup() {
   Serial.begin(9600);
   pinMode(RESET_PIN, INPUT_PULLUP);
   pinMode(SENSOR_PIN, INPUT);
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, HIGH);
   fluidMeter = FluidMeter::getInstance(SENSOR_PIN);
 }
 
