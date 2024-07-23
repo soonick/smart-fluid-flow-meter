@@ -1,8 +1,10 @@
+#include <WiFiS3.h>
 #include <r4-wifi-manager/constants.hpp>
 #include <r4-wifi-manager/r4-wifi-manager.hpp>
 #include "Arduino.h"
 #include "Hashtable.h"
 #include "api/Common.h"
+#include "backend-service.hpp"
 #include "button.hpp"
 #include "fluid-meter.hpp"
 
@@ -11,6 +13,7 @@
 
 const int MILLIS_BETWEEN_POSTS = 600'000;  // 10 minutes
 
+BackendService backendService;
 Hashtable<String, String> userConfig;
 R4WifiManager wifiManager;
 bool apStarted = false;
@@ -18,6 +21,13 @@ bool connectedToWifi = false;
 Button resetButton = Button(RESET_PIN);
 FluidMeter* fluidMeter = nullptr;
 int lastPost = millis();
+
+/**
+ * This variable stores the litters that have been read from the sensor but
+ * haven't been successfully sent to the backend. It helps us not lose
+ * measurements on a spotty connection
+ */
+int littersMemory = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -77,17 +87,25 @@ void connectToWifi() {
       }
     }
 
+    Serial.print("Connected to Wifi: ");
+    Serial.println(*userConfig.get(R4WifiManagerConstants::NETWORK_KEY));
     connectedToWifi = true;
   }
 }
 
 void postMeasurements() {
-  if ((millis() - lastPost) > MILLIS_BETWEEN_POSTS) {
+  if (connectedToWifi && (millis() - lastPost) > MILLIS_BETWEEN_POSTS) {
     lastPost = millis();
-    float litters = fluidMeter->getVolume();
-    Serial.print("Read ");
-    Serial.print(litters);
-    Serial.println(" litters");
+    const float litters = fluidMeter->getVolume();
+    const String deviceId =
+        *userConfig.get(R4WifiManagerConstants::DEVICE_ID_KEY);
+    littersMemory += litters;
+    if (!backendService.postMeasurement(deviceId, littersMemory)) {
+      Serial.println("Error posting measurement to backend");
+    } else {
+      littersMemory = 0;
+      Serial.println("Measurement posted successfully");
+    }
   }
 }
 
