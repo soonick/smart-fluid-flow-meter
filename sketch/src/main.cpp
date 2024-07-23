@@ -27,7 +27,7 @@ int lastPost = millis();
  * haven't been successfully sent to the backend. It helps us not lose
  * measurements on a spotty connection
  */
-int littersMemory = 0;
+float littersMemory = 0.0;
 
 void setup() {
   Serial.begin(9600);
