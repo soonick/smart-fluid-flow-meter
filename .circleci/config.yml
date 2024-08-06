@@ -10,6 +10,15 @@ jobs:
             - "SHA256:nJ4fjs8DBnXE5nlOYmIhp+mdPAhHGegiK+RcxQ+2/kA"
       - checkout
       - run: cd backend && echo $SERVICE_ACCOUNT_KEY | base64 --decode > service-account-key.json && make verify
+  esp32:
+    machine:
+      image: ubuntu-2204:2023.04.2
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:nJ4fjs8DBnXE5nlOYmIhp+mdPAhHGegiK+RcxQ+2/kA"
+      - checkout
+      - run: cd esp32 && make verify
   sketch:
     machine:
       image: ubuntu-2204:2023.04.2
@@ -44,10 +53,12 @@ workflows:
   test_and_publish:
     jobs:
       - backend
+      - esp32
       - sketch
       - tag:
           requires:
             - backend
+            - esp32
             - sketch
           filters:
             branches:

@@ -1,0 +1,3 @@
+dev-environments/vim/tmp/
+src/sdkconfig*
+src/build
