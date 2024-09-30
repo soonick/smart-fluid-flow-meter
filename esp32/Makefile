@@ -26,7 +26,7 @@ serial:
 		idf.py -p /dev/ttyUSB0 monitor
 .PHONY: serial
 
-ssh: build
+ssh:
 	@docker run -it --rm --device /dev/ttyUSB0:/dev/ttyUSB0 \
 		-v $(PWD)/src:/esp32 \
 		-w /esp32 \
