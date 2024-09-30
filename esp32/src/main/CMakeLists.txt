@@ -1,5 +1,6 @@
 idf_component_register(SRCS "main.cpp"
-                       INCLUDE_DIRS ".")
+                       INCLUDE_DIRS "."
+                       PRIV_REQUIRES "wifi_manager")
 
 set(MY_FLAGS
     "-Wall"
