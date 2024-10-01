@@ -27,7 +27,8 @@ serial:
 .PHONY: serial
 
 ssh:
-	@docker run -it --rm --device /dev/ttyUSB0:/dev/ttyUSB0 \
+	@docker run -it --rm \
+		--device /dev/ttyUSB0:/dev/ttyUSB0 \
 		-v $(PWD)/src:/esp32 \
 		-w /esp32 \
 		smart-fluid-flow-meter-esp32-image \

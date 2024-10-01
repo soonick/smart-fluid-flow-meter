@@ -4,3 +4,6 @@
 [submodule "sketch/deps/ArduinoHttpClient"]
 	path = sketch/deps/ArduinoHttpClient
 	url = https://github.com/arduino-libraries/ArduinoHttpClient.git
+[submodule "esp32/src/components/esp-idf-wifi-manager"]
+	path = esp32/src/components/esp-idf-wifi-manager
+	url = https://github.com/soonick/esp-idf-wifi-manager.git
