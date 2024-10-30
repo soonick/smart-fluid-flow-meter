@@ -1,6 +1,6 @@
 idf_component_register(SRCS "main.cpp"
                        INCLUDE_DIRS "."
-                       PRIV_REQUIRES "wifi_manager")
+                       PRIV_REQUIRES "esp-idf-wifi-manager")
 
 set(MY_FLAGS
     "-Wall"
