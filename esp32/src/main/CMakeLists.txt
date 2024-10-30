@@ -1,6 +1,7 @@
 idf_component_register(SRCS "main.cpp"
                        INCLUDE_DIRS "."
-                       PRIV_REQUIRES "esp-idf-wifi-manager")
+                       PRIV_REQUIRES "esp-idf-wifi-manager"
+                                     "esp_driver_gpio")
 
 set(MY_FLAGS
     "-Wall"
