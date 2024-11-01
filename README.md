@@ -6,3 +6,4 @@ Hardware and software for a system that monitors flow of fluids (most likely wat
 
 - [esp32](/esp32/) - The ESP32 code that takes care of reading the sensor and posting measurements to the back-end
 - [backend](/backend/) - Contains the back end server where measurements will be posted
+- [kicad](/kicad/) - Electronic circuit schematic
