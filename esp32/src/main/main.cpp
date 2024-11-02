@@ -1,9 +1,13 @@
 #include "esp_idf_wifi_manager.hpp"
 
-// #include <freertos/idf_additions.h>
+// Standard library
+#include <optional>
+
+// Esp-idf
+#include <driver/gpio.h>
 #include <esp_log.h>
 
-#include <optional>
+#define POWER_LED GPIO_NUM_32
 
 /**
  * Used for logging
@@ -33,9 +37,14 @@ void factory_reset(void* pvParameters) {
 }
 
 /**
- * Connects to WiFi networks as soon as we have wifi configuration available
+ * Turns on the power indicator LED
  */
-void connect_to_wifi(void* pvParameters) {}
+void power_led() {
+  gpio_reset_pin(POWER_LED);
+  gpio_set_pull_mode(POWER_LED, GPIO_PULLUP_ONLY);
+  gpio_set_direction(POWER_LED, GPIO_MODE_OUTPUT);
+  gpio_set_level(POWER_LED, 1);
+}
 
 extern "C" void app_main() {
   EspIdfWifiManager wm = EspIdfWifiManager("my-esp32-ssid", "APassword");
