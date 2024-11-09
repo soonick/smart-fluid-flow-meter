@@ -1537,6 +1537,16 @@
 	)
 	(wire
 		(pts
+			(xy 127 54.61) (xy 127 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7083c242-2d90-4c91-b064-47bbc353fbb9")
+	)
+	(wire
+		(pts
 			(xy 138.43 120.65) (xy 133.35 120.65)
 		)
 		(stroke
@@ -1544,16 +1554,6 @@
 			(type default)
 		)
 		(uuid "83dd4292-58a3-4cb3-8a44-2ec77c669f6d")
-	)
-	(wire
-		(pts
-			(xy 127 102.87) (xy 127 85.09)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8e6c6633-3532-45c7-8b87-9dfcf07b269e")
 	)
 	(wire
 		(pts
@@ -1699,76 +1699,6 @@
 			(justify left bottom)
 		)
 		(uuid "d2f2909c-b080-4a86-9f4a-c15ab5791d8c")
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 127 73.66 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "01cafdd1-b142-4615-b2f5-8605bcc649dd")
-		(property "Reference" "R5"
-			(at 129.54 72.3899 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1M"
-			(at 129.54 74.9299 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 125.222 73.66 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 127 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 127 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "d7c9460e-f6fa-40c8-9435-bfb67130c858")
-		)
-		(pin "2"
-			(uuid "fbba1def-9a3a-4c66-98ca-204343fa5770")
-		)
-		(instances
-			(project "smart-fluid-flow-meter"
-				(path "/39fefc38-68db-426d-adc7-52db70b33c24"
-					(reference "R5")
-					(unit 1)
-				)
-			)
-		)
 	)
 	(symbol
 		(lib_id "RF_Module:ESP32-WROOM-32")
@@ -2040,7 +1970,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1M"
+		(property "Value" "3.3M"
 			(at 129.54 44.4499 0)
 			(effects
 				(font
@@ -2086,76 +2016,6 @@
 			(project ""
 				(path "/39fefc38-68db-426d-adc7-52db70b33c24"
 					(reference "R1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 127 66.04 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "c9f3dc59-32b6-4d39-8b2c-349bcf9a6572")
-		(property "Reference" "R4"
-			(at 129.54 64.7699 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1M"
-			(at 129.54 67.3099 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 125.222 66.04 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 127 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 127 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "3449f1b8-def8-47a8-84a9-8e0bb08f4b98")
-		)
-		(pin "2"
-			(uuid "acc9e6d3-0d6a-4712-9454-6f73f016d4db")
-		)
-		(instances
-			(project "smart-fluid-flow-meter"
-				(path "/39fefc38-68db-426d-adc7-52db70b33c24"
-					(reference "R4")
 					(unit 1)
 				)
 			)
@@ -2305,76 +2165,6 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 127 81.28 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "dc3ff740-d64d-4209-a8e8-6d145cb1c1c5")
-		(property "Reference" "R6"
-			(at 129.54 80.0099 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1M"
-			(at 129.54 82.5499 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 125.222 81.28 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 127 81.28 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 127 81.28 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "b640b113-67c9-415a-9a8f-4ec9465283c7")
-		)
-		(pin "2"
-			(uuid "4f737eaa-c130-4312-b954-16b2c4b193e2")
-		)
-		(instances
-			(project "smart-fluid-flow-meter"
-				(path "/39fefc38-68db-426d-adc7-52db70b33c24"
-					(reference "R6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
 		(at 127 50.8 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2392,7 +2182,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1M"
+		(property "Value" "3.3M"
 			(at 129.54 52.0699 0)
 			(effects
 				(font
@@ -2438,76 +2228,6 @@
 			(project "smart-fluid-flow-meter"
 				(path "/39fefc38-68db-426d-adc7-52db70b33c24"
 					(reference "R2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 127 58.42 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "debc73e6-5f51-43ab-abbf-75106c48f6f8")
-		(property "Reference" "R3"
-			(at 129.54 57.1499 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1M"
-			(at 129.54 59.6899 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 125.222 58.42 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 127 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 127 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "0bd71bec-c3af-4af0-85e6-55095bbe769c")
-		)
-		(pin "2"
-			(uuid "b00e723d-9184-4090-935a-bbe40e393f08")
-		)
-		(instances
-			(project "smart-fluid-flow-meter"
-				(path "/39fefc38-68db-426d-adc7-52db70b33c24"
-					(reference "R3")
 					(unit 1)
 				)
 			)
