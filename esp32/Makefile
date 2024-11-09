@@ -50,7 +50,8 @@ format: build
 		smart-fluid-flow-meter-esp32-image \
 		sh -c " \
 			(find main/ -iname '*.hpp' -o -iname '*.cpp' | xargs clang-format --style=Chromium -i) && \
-			(find components/button/ -iname '*.hpp' -o -iname '*.cpp' | xargs clang-format --style=Chromium -i) \
+			(find components/button/ -iname '*.hpp' -o -iname '*.cpp' | xargs clang-format --style=Chromium -i) && \
+			(find components/fluid-meter/ -iname '*.hpp' -o -iname '*.cpp' | xargs clang-format --style=Chromium -i) \
 		"
 .PHONY: format
 
@@ -61,7 +62,8 @@ check-format: build
 		smart-fluid-flow-meter-esp32-image \
 		sh -c " \
 			(find main/ -iname '*.hpp' -o -iname '*.cpp' | xargs clang-format --style=Chromium --dry-run -Werror) && \
-			(find components/button/ -iname '*.hpp' -o -iname '*.cpp' | xargs clang-format --style=Chromium --dry-run -Werror) \
+			(find components/button/ -iname '*.hpp' -o -iname '*.cpp' | xargs clang-format --style=Chromium --dry-run -Werror) && \
+			(find components/fluid-meter/ -iname '*.hpp' -o -iname '*.cpp' | xargs clang-format --style=Chromium --dry-run -Werror) \
 		"
 .PHONY: check-format
 

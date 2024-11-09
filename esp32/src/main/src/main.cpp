@@ -8,14 +8,22 @@
 // Project components
 #include "button.hpp"
 #include "esp_idf_wifi_manager.hpp"
+#include "fluid-meter.hpp"
 
 #define POWER_LED GPIO_NUM_32
 #define RESET_BUTTON GPIO_NUM_18
+#define FLOW_SENSOR GPIO_NUM_26
 
 /**
  * Used for logging
  */
 const char* TAG = "smart-fluid-flow-meter";
+
+/**
+ * Measurements will be posted after this amount of time has passed since last
+ * post
+ */
+const int MS_BETWEEN_POSTS = 1'000;
 
 /**
  * WiFi configuration
@@ -28,6 +36,11 @@ wm_config wifi_config;
 TaskHandle_t factory_reset_handle;
 
 /**
+ * post_measurements task handle
+ */
+TaskHandle_t post_measurements_handle;
+
+/**
  * Button to factory reset wifi settings
  */
 Button reset_button = Button(RESET_BUTTON);
@@ -36,6 +49,23 @@ Button reset_button = Button(RESET_BUTTON);
  * Wifi manager
  */
 EspIdfWifiManager* wm = nullptr;
+
+/**
+ * Fluid meter
+ */
+FluidMeter* fluid_meter = nullptr;
+
+/**
+ * This variable stores the litters that have been read from the sensor but
+ * haven't been successfully sent to the backend. It helps us not lose
+ * measurements on a spotty connection
+ */
+float litters_memory = 0.0;
+
+/**
+ * Last time measurements were posted to backend
+ */
+uint64_t last_post = 0;
 
 /**
  * Saves the wifi config and shuts down access point
@@ -63,6 +93,24 @@ void factory_reset(void* pvParameters) {
 }
 
 /**
+ * Reads measurements from fluid meter and posts them to backend on the
+ * specified cadence
+ */
+void post_measurements(void* pvParameters) {
+  (void)pvParameters;
+
+  while (true) {
+    // if (connectedToWifi && (millis() - lastPost) > MILLIS_BETWEEN_POSTS) {
+    uint64_t current_millis = esp_timer_get_time() / 1000;
+    if ((current_millis - last_post) > MS_BETWEEN_POSTS) {
+      last_post = current_millis;
+      const float litters = fluid_meter->get_volume();
+      ESP_LOGI(TAG, "Number of litters read: %f", litters);
+    }
+  }
+}
+
+/**
  * Turns on the power indicator LED
  */
 void power_led() {
@@ -84,6 +132,10 @@ extern "C" void app_main() {
 
   xTaskCreate(factory_reset, "factory_reset", 4096, nullptr, tskIDLE_PRIORITY,
               &factory_reset_handle);
+
+  fluid_meter = FluidMeter::get_instance(FLOW_SENSOR);
+  xTaskCreate(post_measurements, "post_measurements", 4096, nullptr,
+              tskIDLE_PRIORITY, &post_measurements_handle);
 
   power_led();
 }
