@@ -1,5 +1,3 @@
-#include "esp_idf_wifi_manager.hpp"
-
 // Standard library
 #include <optional>
 
@@ -7,7 +5,12 @@
 #include <driver/gpio.h>
 #include <esp_log.h>
 
+// Project components
+#include "button.hpp"
+#include "esp_idf_wifi_manager.hpp"
+
 #define POWER_LED GPIO_NUM_32
+#define RESET_BUTTON GPIO_NUM_18
 
 /**
  * Used for logging
@@ -25,14 +28,21 @@ wm_config config;
 TaskHandle_t factory_reset_handle;
 
 /**
+ * Button to factory reset wifi settings
+ */
+Button reset_button = Button(RESET_BUTTON);
+
+/**
  * Monitors reset button and performs hard reset if conditions are met
  */
 void factory_reset(void* pvParameters) {
   (void)pvParameters;
 
   while (true) {
-    vTaskDelay(3000 / portTICK_PERIOD_MS);  // Blink every 3 seconds
-    ESP_LOGE(TAG, "config.ssid = %s", config.ssid.c_str());
+    if (reset_button.is_long_pressed(5000)) {
+      ESP_LOGE(TAG, "Resetting meter");
+      // TODO: reset wifi manager
+    }
   }
 }
 
