@@ -26,9 +26,17 @@ serial:
 		idf.py -p /dev/ttyUSB0 monitor
 .PHONY: serial
 
-ssh:
+ssh-connected:
 	@docker run -it --rm \
 		--device /dev/ttyUSB0:/dev/ttyUSB0 \
+		-v $(PWD)/src:/esp32 \
+		-w /esp32 \
+		smart-fluid-flow-meter-esp32-image \
+		bash
+.PHONY: ssh-connected
+
+ssh:
+	@docker run -it --rm \
 		-v $(PWD)/src:/esp32 \
 		-w /esp32 \
 		smart-fluid-flow-meter-esp32-image \
