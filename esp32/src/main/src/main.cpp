@@ -51,7 +51,6 @@ void factory_reset(void* pvParameters) {
  */
 void power_led() {
   gpio_reset_pin(POWER_LED);
-  gpio_set_pull_mode(POWER_LED, GPIO_PULLUP_ONLY);
   gpio_set_direction(POWER_LED, GPIO_MODE_OUTPUT);
   gpio_set_level(POWER_LED, 1);
 }
@@ -68,4 +67,6 @@ extern "C" void app_main() {
 
   xTaskCreate(factory_reset, "factory_reset", 4096, nullptr, tskIDLE_PRIORITY,
               &factory_reset_handle);
+
+  power_led();
 }
