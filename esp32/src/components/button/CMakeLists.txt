@@ -1,13 +1,11 @@
-idf_component_register(SRCS "src/main.cpp"
+idf_component_register(SRCS "src/button.cpp"
                        INCLUDE_DIRS "include"
-                       PRIV_REQUIRES "button"
-                                     "esp-idf-wifi-manager"
-                                     "esp_driver_gpio")
+                       PRIV_REQUIRES "esp_driver_gpio"
+                                     "esp_timer")
 
 set(MY_FLAGS
     "-Wall"
     "-Wextra"
-    "-Wpedantic"
     "-Werror"
     "-Werror=unused-function"
     "-Werror=unused-variable"
