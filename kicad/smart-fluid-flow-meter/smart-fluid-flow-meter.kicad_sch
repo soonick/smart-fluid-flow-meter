@@ -1688,6 +1688,16 @@
 	)
 	(wire
 		(pts
+			(xy 132.08 105.41) (xy 138.43 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "535c95ae-4232-45ab-bfcb-bee97a85ddf2")
+	)
+	(wire
+		(pts
 			(xy 73.66 34.29) (xy 73.66 71.12)
 		)
 		(stroke
@@ -1748,7 +1758,7 @@
 	)
 	(wire
 		(pts
-			(xy 115.57 105.41) (xy 138.43 105.41)
+			(xy 115.57 105.41) (xy 124.46 105.41)
 		)
 		(stroke
 			(width 0)
@@ -1826,7 +1836,7 @@
 		)
 		(uuid "f4d45b2b-8886-41e9-a17f-4832a47b64f3")
 	)
-	(text "#1 - With a Vcc of 5v, the sensor drops the voltage all the way to 3.8v\n#2 - Internall Pull-Up resistor is activated. Typically, it's 45 KOhms"
+	(text "#1 - With a Vcc of 5v, the sensor drops the voltage all the way to 3.8v"
 		(exclude_from_sim no)
 		(at 210.312 18.542 0)
 		(effects
@@ -2064,7 +2074,7 @@
 	)
 	(symbol
 		(lib_id "Device:LED")
-		(at 138.43 110.49 90)
+		(at 128.27 105.41 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2073,25 +2083,23 @@
 		(fields_autoplaced yes)
 		(uuid "3dfb4d03-2120-4db5-9ab5-5ea23d560702")
 		(property "Reference" "D1"
-			(at 142.24 110.8074 90)
+			(at 129.8575 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Value" "Power on LED"
-			(at 142.24 113.3474 90)
+			(at 129.8575 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Footprint" ""
-			(at 138.43 110.49 0)
+			(at 128.27 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2100,7 +2108,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 138.43 110.49 0)
+			(at 128.27 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2109,7 +2117,7 @@
 			)
 		)
 		(property "Description" "Light emitting diode"
-			(at 138.43 110.49 0)
+			(at 128.27 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2195,6 +2203,76 @@
 			(project ""
 				(path "/39fefc38-68db-426d-adc7-52db70b33c24"
 					(reference "SW1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 138.43 110.49 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b68472a3-ff70-4e50-b5f9-d875cf3d024c")
+		(property "Reference" "R3"
+			(at 140.97 109.2199 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "220"
+			(at 140.97 111.7599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 136.652 110.49 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 138.43 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 138.43 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "faff6e1d-477c-4a1a-b4cb-2eba294644a1")
+		)
+		(pin "2"
+			(uuid "be35835b-f36d-4df8-bb1b-35a6c120e8d3")
+		)
+		(instances
+			(project ""
+				(path "/39fefc38-68db-426d-adc7-52db70b33c24"
+					(reference "R3")
 					(unit 1)
 				)
 			)
