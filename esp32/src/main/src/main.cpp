@@ -56,10 +56,11 @@ void power_led() {
 }
 
 extern "C" void app_main() {
-  EspIdfWifiManager wm = EspIdfWifiManager("my-esp32-ssid", "APassword");
+  EspIdfWifiManager* wm =
+      EspIdfWifiManager::get_instance("my-esp32-ssid", "APassword");
 
   std::optional<wm_config> config_opt =
-      wm.get_config([](wm_config in) { config = in; });
+      wm->get_config([](wm_config in) { config = in; });
 
   if (config_opt.has_value()) {
     config = config_opt.value();
