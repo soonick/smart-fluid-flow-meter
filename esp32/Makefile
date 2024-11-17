@@ -49,7 +49,11 @@ format: build
 		-w /esp32 \
 		smart-fluid-flow-meter-esp32-image \
 		sh -c " \
-			(find main/ -iname '*.hpp' -o -iname '*.cpp' | xargs clang-format --style=Chromium -i) && \
+			(find main/ \
+				-path 'main/test/build' -prune -o \
+				-path 'main/test/external' -prune -o \
+				\( -iname '*.hpp' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.c' \) -print | \
+				xargs clang-format --style=Chromium --dry-run -Werror) && \
 			(find components/button/ -iname '*.hpp' -o -iname '*.cpp' | xargs clang-format --style=Chromium -i) && \
 			(find components/fluid-meter/ -iname '*.hpp' -o -iname '*.cpp' | xargs clang-format --style=Chromium -i) \
 		"
@@ -61,13 +65,31 @@ check-format: build
 		-w /esp32 \
 		smart-fluid-flow-meter-esp32-image \
 		sh -c " \
-			(find main/ -iname '*.hpp' -o -iname '*.cpp' | xargs clang-format --style=Chromium --dry-run -Werror) && \
+			(find main/ \
+				-path 'main/test/build' -prune -o \
+				-path 'main/test/external' -prune -o \
+				\( -iname '*.hpp' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.c' \) -print | \
+				xargs clang-format --style=Chromium --dry-run -Werror) && \
 			(find components/button/ -iname '*.hpp' -o -iname '*.cpp' | xargs clang-format --style=Chromium --dry-run -Werror) && \
 			(find components/fluid-meter/ -iname '*.hpp' -o -iname '*.cpp' | xargs clang-format --style=Chromium --dry-run -Werror) \
 		"
 .PHONY: check-format
 
-verify: build check-format
+test: image
+	@docker run -it --rm \
+		-v $(PWD)/src:/esp32 \
+		-w /esp32 \
+		smart-fluid-flow-meter-esp32-image \
+		sh -c " \
+			mkdir -p /esp32/main/test/build && \
+			cd /esp32/main/test/build && \
+			cmake .. && \
+			make && \
+			./test \
+		"
+.PHONY: test
+
+verify: build check-format test
 .PHONY: verify
 
 # Starts a container with a neovim development environment ready to use

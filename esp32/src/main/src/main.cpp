@@ -6,6 +6,7 @@
 #include <esp_log.h>
 
 // Project components
+#include "backend-service.hpp"
 #include "button.hpp"
 #include "esp_idf_wifi_manager.hpp"
 #include "fluid-meter.hpp"
@@ -22,8 +23,9 @@ const char* TAG = "smart-fluid-flow-meter";
 /**
  * Measurements will be posted after this amount of time has passed since last
  * post
+ * TODO: Change value
  */
-const int MS_BETWEEN_POSTS = 1'000;
+const int MS_BETWEEN_POSTS = 10'000;
 
 /**
  * WiFi configuration
@@ -51,16 +53,14 @@ Button reset_button = Button(RESET_BUTTON);
 EspIdfWifiManager* wm = nullptr;
 
 /**
+ * Backend service
+ */
+BackendService* bs = nullptr;
+
+/**
  * Fluid meter
  */
 FluidMeter* fluid_meter = nullptr;
-
-/**
- * This variable stores the litters that have been read from the sensor but
- * haven't been successfully sent to the backend. It helps us not lose
- * measurements on a spotty connection
- */
-float litters_memory = 0.0;
 
 /**
  * Last time measurements were posted to backend
@@ -72,8 +72,9 @@ uint64_t last_post = 0;
  */
 void save_config(wm_config in) {
   wifi_config = in;
+  bs = BackendService::get_instance(in.ssid, in.password);
   wm->shutdown_ap();
-  ESP_LOGI(TAG, "Wifi is configured");
+  ESP_LOGI(TAG, "Wifi credentials set in eeprom");
 }
 
 /**
@@ -87,6 +88,8 @@ void factory_reset(void* pvParameters) {
       ESP_LOGI(TAG, "Resetting meter");
       wm->clear_config();
       wifi_config.ssid = "";
+      delete bs;
+      bs = nullptr;
       std::optional<wm_config> config_opt = wm->get_config(save_config);
     }
   }
@@ -100,12 +103,17 @@ void post_measurements(void* pvParameters) {
   (void)pvParameters;
 
   while (true) {
-    // if (connectedToWifi && (millis() - lastPost) > MILLIS_BETWEEN_POSTS) {
     uint64_t current_millis = esp_timer_get_time() / 1000;
     if ((current_millis - last_post) > MS_BETWEEN_POSTS) {
       last_post = current_millis;
+      // TODO: save litters information somewhere so it can be sent again when
+      // network comes back up
       const float litters = fluid_meter->get_volume();
-      ESP_LOGI(TAG, "Number of litters read: %f", litters);
+      if (bs == nullptr) {
+        ESP_LOGE(TAG, "Backend service is nullptr");
+      } else {
+        bs->post_measurement(wifi_config.id, litters);
+      }
     }
   }
 }
