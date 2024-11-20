@@ -1,0 +1,26 @@
+%TF.GenerationSoftware,KiCad,Pcbnew,8.0.4+dfsg-1*%
+%TF.CreationDate,2024-11-21T19:10:24-05:00*%
+%TF.ProjectId,smart-fluid-flow-meter,736d6172-742d-4666-9c75-69642d666c6f,rev?*%
+%TF.SameCoordinates,Original*%
+%TF.FileFunction,Profile,NP*%
+%FSLAX46Y46*%
+G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
+G04 Created by KiCad (PCBNEW 8.0.4+dfsg-1) date 2024-11-21 19:10:24*
+%MOMM*%
+%LPD*%
+G01*
+G04 APERTURE LIST*
+%TA.AperFunction,Profile*%
+%ADD10C,0.050000*%
+%TD*%
+G04 APERTURE END LIST*
+D10*
+X64000000Y-96000000D02*
+X128000000Y-96000000D01*
+X128000000Y-96000000D02*
+X128000000Y-42000000D01*
+X64000000Y-42000000D02*
+X128000000Y-42000000D01*
+X64000000Y-42000000D02*
+X64000000Y-96000000D01*
+M02*
