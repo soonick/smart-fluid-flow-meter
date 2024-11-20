@@ -1603,22 +1603,34 @@
 		)
 	)
 	(junction
+		(at 160.02 120.65)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4661c8d6-884d-4102-973a-6a21b41e6081")
+	)
+	(junction
+		(at 167.64 120.65)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6b870b86-60bf-4e93-8487-1dc4d12d5d45")
+	)
+	(junction
 		(at 100.33 120.65)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "81d41cc4-a546-424b-9af1-67560a9a97de")
 	)
 	(junction
+		(at 147.32 120.65)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8327b346-3b91-48d3-8aad-3a5f15435254")
+	)
+	(junction
 		(at 100.33 34.29)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "a5afde0e-ff49-4bcd-b19f-70783987cde3")
-	)
-	(junction
-		(at 133.35 120.65)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "b85139a5-4bdf-4648-961e-08221e392c91")
 	)
 	(junction
 		(at 138.43 120.65)
@@ -1628,13 +1640,53 @@
 	)
 	(wire
 		(pts
-			(xy 127 36.83) (xy 133.35 36.83)
+			(xy 152.4 85.09) (xy 115.57 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "03170ea5-9e1b-40ce-9cd1-caaa1e057e58")
+	)
+	(wire
+		(pts
+			(xy 124.46 36.83) (xy 133.35 36.83)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "0912d200-76ca-4c96-90ae-cba38fd281de")
+	)
+	(wire
+		(pts
+			(xy 135.89 96.52) (xy 137.16 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1cfcbb90-4bc8-427f-9501-2a8801e9ffec")
+	)
+	(wire
+		(pts
+			(xy 160.02 114.3) (xy 160.02 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1fc532a0-c517-4361-92d1-cc4ba47d8381")
+	)
+	(wire
+		(pts
+			(xy 167.64 120.65) (xy 176.53 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "205e6656-f509-44a3-a909-6cf1e388befa")
 	)
 	(wire
 		(pts
@@ -1648,13 +1700,13 @@
 	)
 	(wire
 		(pts
-			(xy 157.48 82.55) (xy 157.48 120.65)
+			(xy 135.89 87.63) (xy 135.89 96.52)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "372fed60-e23f-43a6-850b-95e63b00d31b")
+		(uuid "23a48c4b-72ae-4c6e-bc4c-2c08afde4947")
 	)
 	(wire
 		(pts
@@ -1668,7 +1720,7 @@
 	)
 	(wire
 		(pts
-			(xy 127 39.37) (xy 127 36.83)
+			(xy 124.46 39.37) (xy 124.46 36.83)
 		)
 		(stroke
 			(width 0)
@@ -1678,7 +1730,17 @@
 	)
 	(wire
 		(pts
-			(xy 133.35 120.65) (xy 100.33 120.65)
+			(xy 147.32 120.65) (xy 138.43 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4b66f3d0-243b-46dd-827b-0681694f9ba2")
+	)
+	(wire
+		(pts
+			(xy 100.33 120.65) (xy 138.43 120.65)
 		)
 		(stroke
 			(width 0)
@@ -1698,6 +1760,16 @@
 	)
 	(wire
 		(pts
+			(xy 167.64 82.55) (xy 157.48 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "53ab8852-a4c8-4792-9118-111c3dadfd8f")
+	)
+	(wire
+		(pts
 			(xy 73.66 34.29) (xy 73.66 71.12)
 		)
 		(stroke
@@ -1708,7 +1780,17 @@
 	)
 	(wire
 		(pts
-			(xy 115.57 97.79) (xy 127 97.79)
+			(xy 160.02 120.65) (xy 147.32 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7008b59f-fe41-486e-a894-ec9406a0b43d")
+	)
+	(wire
+		(pts
+			(xy 115.57 97.79) (xy 124.46 97.79)
 		)
 		(stroke
 			(width 0)
@@ -1718,13 +1800,53 @@
 	)
 	(wire
 		(pts
-			(xy 138.43 120.65) (xy 133.35 120.65)
+			(xy 144.78 96.52) (xy 147.32 96.52)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "83dd4292-58a3-4cb3-8a44-2ec77c669f6d")
+		(uuid "7e788260-9e55-4b10-ad1d-1a7407f9a12d")
+	)
+	(wire
+		(pts
+			(xy 167.64 120.65) (xy 160.02 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7f158c40-849c-4e3a-8106-11675b8bf669")
+	)
+	(wire
+		(pts
+			(xy 167.64 82.55) (xy 167.64 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "958d7f80-0b53-4ca8-a944-fb2dfc1291b1")
+	)
+	(wire
+		(pts
+			(xy 160.02 96.52) (xy 160.02 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9b0344cb-0f1b-48a1-9959-bc8d879ce431")
+	)
+	(wire
+		(pts
+			(xy 147.32 114.3) (xy 147.32 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a10fe9d2-ddde-4ccb-8f7e-ceb1e4fe1848")
 	)
 	(wire
 		(pts
@@ -1745,6 +1867,26 @@
 			(type default)
 		)
 		(uuid "add437db-4a08-4480-a544-bb405a0b3fa4")
+	)
+	(wire
+		(pts
+			(xy 176.53 50.8) (xy 133.35 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "afa2659e-936b-42e9-a13e-199f91a2c72c")
+	)
+	(wire
+		(pts
+			(xy 147.32 96.52) (xy 147.32 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b02718f0-4017-4363-93d2-85bf90cd9a48")
 	)
 	(wire
 		(pts
@@ -1778,7 +1920,7 @@
 	)
 	(wire
 		(pts
-			(xy 133.35 39.37) (xy 133.35 120.65)
+			(xy 176.53 50.8) (xy 176.53 120.65)
 		)
 		(stroke
 			(width 0)
@@ -1788,17 +1930,17 @@
 	)
 	(wire
 		(pts
-			(xy 138.43 120.65) (xy 157.48 120.65)
+			(xy 115.57 87.63) (xy 135.89 87.63)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d41155f8-886e-4cbf-97ca-69d6a6f90d7d")
+		(uuid "bf547657-91af-4a1c-b555-b9c5ff04e106")
 	)
 	(wire
 		(pts
-			(xy 127 46.99) (xy 127 97.79)
+			(xy 124.46 46.99) (xy 124.46 97.79)
 		)
 		(stroke
 			(width 0)
@@ -1825,6 +1967,26 @@
 			(type default)
 		)
 		(uuid "e044ed3a-7bc3-42bb-8be4-5c45efe694b9")
+	)
+	(wire
+		(pts
+			(xy 133.35 50.8) (xy 133.35 39.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e5234184-f186-4b31-a2a3-f60b27f09963")
+	)
+	(wire
+		(pts
+			(xy 152.4 96.52) (xy 152.4 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f12f7f7f-462e-467c-bdba-6e7202f0000d")
 	)
 	(wire
 		(pts
@@ -2073,6 +2235,76 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 147.32 110.49 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2ff4a657-6377-43b0-88e2-82c62bb46ef8")
+		(property "Reference" "R4"
+			(at 149.86 109.2199 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100"
+			(at 149.86 111.7599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 145.542 110.49 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 147.32 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 147.32 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d5bd38c1-ee95-40a8-b9f1-21e85dc48e56")
+		)
+		(pin "2"
+			(uuid "888138e8-c835-4cdd-8afd-88b55bff0818")
+		)
+		(instances
+			(project "smart-fluid-flow-meter"
+				(path "/39fefc38-68db-426d-adc7-52db70b33c24"
+					(reference "R4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:LED")
 		(at 128.27 105.41 180)
 		(unit 1)
@@ -2090,7 +2322,7 @@
 				)
 			)
 		)
-		(property "Value" "Power on LED"
+		(property "Value" "Green LED"
 			(at 129.8575 100.33 0)
 			(effects
 				(font
@@ -2135,6 +2367,144 @@
 			(project ""
 				(path "/39fefc38-68db-426d-adc7-52db70b33c24"
 					(reference "D1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:LED")
+		(at 156.21 96.52 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "40ed9e5d-5063-47f7-ba09-10367efe28c0")
+		(property "Reference" "D2"
+			(at 157.7975 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Red LED"
+			(at 157.7975 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 156.21 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 156.21 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Light emitting diode"
+			(at 156.21 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "26b27d05-28f0-44fc-b095-1d0047d81954")
+		)
+		(pin "2"
+			(uuid "de049d73-8c82-4055-9292-cf387e5c80dc")
+		)
+		(instances
+			(project "smart-fluid-flow-meter"
+				(path "/39fefc38-68db-426d-adc7-52db70b33c24"
+					(reference "D2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 160.02 110.49 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "416573f0-8a38-4465-89e9-b4daabbf4a9f")
+		(property "Reference" "R2"
+			(at 162.56 109.2199 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "220"
+			(at 162.56 111.7599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 158.242 110.49 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 160.02 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 160.02 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2087749d-1c94-462b-9125-ade5340e5890")
+		)
+		(pin "2"
+			(uuid "adc926eb-dcf9-47d6-ac3b-6c1f9af69e01")
+		)
+		(instances
+			(project "smart-fluid-flow-meter"
+				(path "/39fefc38-68db-426d-adc7-52db70b33c24"
+					(reference "R2")
 					(unit 1)
 				)
 			)
@@ -2279,35 +2649,33 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 127 43.18 0)
+		(lib_id "Device:LED")
+		(at 140.97 96.52 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "c99ecbb0-b077-46db-a323-a182c5d2be0c")
-		(property "Reference" "R1"
-			(at 129.54 41.9099 0)
+		(uuid "c625558f-5ab7-4c9f-9be3-e87e3fb4b5ff")
+		(property "Reference" "D3"
+			(at 142.5575 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Value" "3.3M"
-			(at 129.54 44.4499 0)
+		(property "Value" "Yellow LED"
+			(at 142.5575 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Footprint" ""
-			(at 125.222 43.18 90)
+			(at 140.97 96.52 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2316,7 +2684,77 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 127 43.18 0)
+			(at 140.97 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Light emitting diode"
+			(at 140.97 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c7e09444-6248-4369-9979-9e2e1de21591")
+		)
+		(pin "2"
+			(uuid "34ca3190-5124-431d-890b-48d89c49f86f")
+		)
+		(instances
+			(project "smart-fluid-flow-meter"
+				(path "/39fefc38-68db-426d-adc7-52db70b33c24"
+					(reference "D3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 124.46 43.18 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c99ecbb0-b077-46db-a323-a182c5d2be0c")
+		(property "Reference" "R1"
+			(at 127 41.9099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "3.3M"
+			(at 127 44.4499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 122.682 43.18 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 124.46 43.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2325,7 +2763,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 127 43.18 0)
+			(at 124.46 43.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
