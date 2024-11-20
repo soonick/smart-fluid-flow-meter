@@ -1,14 +1,17 @@
 idf_component_register(SRCS "src/main.cpp"
+                            "src/backend-service.cpp"
                        INCLUDE_DIRS "include"
                        PRIV_REQUIRES "button"
                                      "esp-idf-wifi-manager"
                                      "esp_driver_gpio"
-                                     "fluid-meter")
+                                     "esp_http_client"
+                                     "esp_wifi"
+                                     "fluid-meter"
+                                     "mbedtls")
 
 set(MY_FLAGS
     "-Wall"
     "-Wextra"
-    "-Wpedantic"
     "-Werror"
     "-Werror=unused-function"
     "-Werror=unused-variable"

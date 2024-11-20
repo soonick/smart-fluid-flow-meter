@@ -1,3 +1,4 @@
 dev-environments/vim/tmp/
 src/sdkconfig*
 src/build
+src/main/test/build/

@@ -9,7 +9,7 @@
 class FluidMeter {
  public:
   /**
-   * Delete this constructos to make sure there can only be one instance
+   * Delete these constructors to make sure there can only be one instance
    */
   FluidMeter(FluidMeter const&) = delete;
   void operator=(FluidMeter const&) = delete;
