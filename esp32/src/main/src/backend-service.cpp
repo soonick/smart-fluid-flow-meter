@@ -90,8 +90,8 @@ std::string BackendService::get_ssid() {
   return std::string(ssid);
 }
 
-bool BackendService::post_measurement(const std::string& deviceId,
-                                      const float litters) {
+int BackendService::post_measurement(const std::string& deviceId,
+                                     const float litters) {
   init_wifi();
 
   esp_http_client_config_t config = {};
@@ -110,10 +110,11 @@ bool BackendService::post_measurement(const std::string& deviceId,
   esp_http_client_set_header(client, "Content-Type", "application/json");
   esp_err_t err = esp_http_client_perform(client);
 
+  int status_code = -1;
   if (err == ESP_OK) {
-    int status_code = esp_http_client_get_status_code(client);
+    status_code = esp_http_client_get_status_code(client);
     if (status_code != 200) {
-      ESP_LOGI(TAG, "Got %d code", status_code);
+      ESP_LOGE(TAG, "Got %d code", status_code);
     }
   } else {
     ESP_LOGE(TAG, "Error with https request: %s", esp_err_to_name(err));
@@ -122,7 +123,7 @@ bool BackendService::post_measurement(const std::string& deviceId,
   ESP_ERROR_CHECK(esp_http_client_cleanup(client));
   deinit_wifi();
 
-  return true;
+  return status_code;
 }
 
 void BackendService::got_ip_handler(void* arg,

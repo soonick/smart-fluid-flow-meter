@@ -31,9 +31,10 @@ class BackendService {
    * Starts the whole wifi stack and posts the request. After the request is
    * done, it tears down the wifi stack to save battery.
    *
-   * Returns true if the measurement was posted successfully, false otherwise
+   * Returns the status code for the response. If there was an error sending the
+   * request, it returns -1
    */
-  bool post_measurement(const std::string& deviceId, const float litters);
+  int post_measurement(const std::string& deviceId, const float litters);
 
   /**
    * Used for tests
