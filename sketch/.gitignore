@@ -1,4 +1,0 @@
-build/
-test/build/
-dev-environments/vim/tmp/
-**/compile_commands.json
