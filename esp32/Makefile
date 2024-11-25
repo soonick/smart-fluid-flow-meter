@@ -53,7 +53,7 @@ format: build
 				-path 'main/test/build' -prune -o \
 				-path 'main/test/external' -prune -o \
 				\( -iname '*.hpp' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.c' \) -print | \
-				xargs clang-format --style=Chromium --dry-run -Werror) && \
+				xargs clang-format --style=Chromium -i) && \
 			(find components/button/ -iname '*.hpp' -o -iname '*.cpp' | xargs clang-format --style=Chromium -i) && \
 			(find components/fluid-meter/ -iname '*.hpp' -o -iname '*.cpp' | xargs clang-format --style=Chromium -i) \
 		"
