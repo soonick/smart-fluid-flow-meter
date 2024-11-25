@@ -41,6 +41,8 @@ class BackendService {
   std::string get_ssid();
 
  private:
+  static const char* BACKEND_URL;
+  static const char* MEASURE_API;
   static const char* TAG;
 
   static BackendService* instance;

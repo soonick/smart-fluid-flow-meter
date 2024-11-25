@@ -13,6 +13,9 @@
 
 BackendService* BackendService::instance = nullptr;
 SemaphoreHandle_t BackendService::IP_SEMPH = NULL;
+const char* BackendService::BACKEND_URL =
+    "https://smart-fluid-flow-meter-backend.ncona.com";
+const char* BackendService::MEASURE_API = "/measure";
 const char* BackendService::TAG = "backend-service";
 esp_netif_t* BackendService::wifi_if = NULL;
 
@@ -92,8 +95,9 @@ bool BackendService::post_measurement(const std::string& deviceId,
   init_wifi();
 
   esp_http_client_config_t config = {};
-  // TODO: Move to constant
-  config.url = "https://smart-fluid-flow-meter-backend.ncona.com/measure";
+  char url[100];
+  sprintf(url, "%s%s", BACKEND_URL, MEASURE_API);
+  config.url = url;
   config.method = HTTP_METHOD_POST;
   config.crt_bundle_attach = esp_crt_bundle_attach;
   config.event_handler = BackendService::http_event_handler;
