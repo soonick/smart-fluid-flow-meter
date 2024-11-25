@@ -11,9 +11,22 @@
 #include "esp_idf_wifi_manager.hpp"
 #include "fluid-meter.hpp"
 
-#define POWER_LED GPIO_NUM_32
+#define GREEN_LED GPIO_NUM_32
+#define YELLOW_LED GPIO_NUM_33
+#define RED_LED GPIO_NUM_14
 #define RESET_BUTTON GPIO_NUM_18
-#define FLOW_SENSOR GPIO_NUM_26
+#define FLOW_SENSOR GPIO_NUM_4
+
+/**
+ * Different status the system can be in
+ */
+enum SystemStatus {
+  BOOTING,
+  FACTORY_SETTINGS,
+  WIFI_CONFIGURED,
+  SENDING_REQUEST,
+  REQUEST_FAILED,
+};
 
 /**
  * Used for logging
@@ -23,9 +36,8 @@ const char* TAG = "smart-fluid-flow-meter";
 /**
  * Measurements will be posted after this amount of time has passed since last
  * post
- * TODO: Change value
  */
-const int MS_BETWEEN_POSTS = 10'000;
+const int MS_BETWEEN_POSTS = 1'200'000;  // 20 minutes
 
 /**
  * WiFi configuration
@@ -41,6 +53,11 @@ TaskHandle_t factory_reset_handle;
  * post_measurements task handle
  */
 TaskHandle_t post_measurements_handle;
+
+/**
+ * status_leds task handle
+ */
+TaskHandle_t status_leds_handle;
 
 /**
  * Button to factory reset wifi settings
@@ -68,12 +85,18 @@ FluidMeter* fluid_meter = nullptr;
 uint64_t last_post = 0;
 
 /**
+ * Curent status of the system. We use this to decide which LEDs to turn on
+ */
+SystemStatus current_status = BOOTING;
+
+/**
  * Saves the wifi config and shuts down access point
  */
 void save_config(wm_config in) {
   wifi_config = in;
   bs = BackendService::get_instance(in.ssid, in.password);
   wm->shutdown_ap();
+  current_status = WIFI_CONFIGURED;
   ESP_LOGI(TAG, "Wifi credentials set in eeprom");
 }
 
@@ -105,6 +128,7 @@ void post_measurements(void* pvParameters) {
   while (true) {
     uint64_t current_millis = esp_timer_get_time() / 1000;
     if ((current_millis - last_post) > MS_BETWEEN_POSTS) {
+      ESP_LOGE(TAG, "Sending request");
       last_post = current_millis;
       // TODO: save litters information somewhere so it can be sent again when
       // network comes back up
@@ -112,23 +136,78 @@ void post_measurements(void* pvParameters) {
       if (bs == nullptr) {
         ESP_LOGE(TAG, "Backend service is nullptr");
       } else {
-        bs->post_measurement(wifi_config.id, litters);
+        current_status = SENDING_REQUEST;
+        int status_code = bs->post_measurement(wifi_config.id, litters);
+        switch (status_code) {
+          case 200:
+            current_status = WIFI_CONFIGURED;
+            break;
+          default:
+            current_status = REQUEST_FAILED;
+        }
       }
     }
   }
 }
 
 /**
- * Turns on the power indicator LED
+ * Turns the correct LEDs based on the status of the system
  */
-void power_led() {
-  gpio_reset_pin(POWER_LED);
-  gpio_set_direction(POWER_LED, GPIO_MODE_OUTPUT);
-  ESP_LOGI(TAG, "Turning on power LED");
-  gpio_set_level(POWER_LED, 1);
+void status_leds() {
+  switch (current_status) {
+    case BOOTING:
+      gpio_set_level(RED_LED, 0);
+      gpio_set_level(GREEN_LED, 0);
+      gpio_set_level(YELLOW_LED, 1);
+      break;
+    case FACTORY_SETTINGS:
+      gpio_set_level(RED_LED, 1);
+      gpio_set_level(GREEN_LED, 1);
+      gpio_set_level(YELLOW_LED, 1);
+      break;
+    case WIFI_CONFIGURED:
+      gpio_set_level(RED_LED, 0);
+      gpio_set_level(GREEN_LED, 1);
+      gpio_set_level(YELLOW_LED, 0);
+      break;
+    case SENDING_REQUEST:
+      gpio_set_level(RED_LED, 0);
+      gpio_set_level(GREEN_LED, 1);
+      gpio_set_level(YELLOW_LED, 1);
+      break;
+    case REQUEST_FAILED:
+      gpio_set_level(RED_LED, 1);
+      gpio_set_level(GREEN_LED, 0);
+      gpio_set_level(YELLOW_LED, 0);
+      break;
+    default:
+      gpio_set_level(RED_LED, 0);
+      gpio_set_level(GREEN_LED, 0);
+      gpio_set_level(YELLOW_LED, 0);
+  }
+}
+
+/**
+ * Task that runs status_leds continuously
+ */
+void status_leds_task(void* pvParameters) {
+  (void)pvParameters;
+
+  while (true) {
+    status_leds();
+  }
 }
 
 extern "C" void app_main() {
+  gpio_reset_pin(GREEN_LED);
+  gpio_set_direction(GREEN_LED, GPIO_MODE_OUTPUT);
+  gpio_reset_pin(YELLOW_LED);
+  gpio_set_direction(YELLOW_LED, GPIO_MODE_OUTPUT);
+  gpio_reset_pin(RED_LED);
+  gpio_set_direction(RED_LED, GPIO_MODE_OUTPUT);
+
+  status_leds();
+
   wm = EspIdfWifiManager::get_instance("my-esp32-ssid", "APassword");
 
   wifi_config.ssid = "";
@@ -136,14 +215,16 @@ extern "C" void app_main() {
 
   if (config_opt.has_value()) {
     save_config(config_opt.value());
+  } else {
+    current_status = FACTORY_SETTINGS;
   }
+
+  fluid_meter = FluidMeter::get_instance(FLOW_SENSOR);
 
   xTaskCreate(factory_reset, "factory_reset", 4096, nullptr, tskIDLE_PRIORITY,
               &factory_reset_handle);
-
-  fluid_meter = FluidMeter::get_instance(FLOW_SENSOR);
   xTaskCreate(post_measurements, "post_measurements", 4096, nullptr,
               tskIDLE_PRIORITY, &post_measurements_handle);
-
-  power_led();
+  xTaskCreate(status_leds_task, "status_leds", 4096, nullptr, tskIDLE_PRIORITY,
+              &status_leds_handle);
 }
