@@ -85,6 +85,11 @@ FluidMeter* fluid_meter = nullptr;
 uint64_t last_post = 0;
 
 /**
+ * Max numnber of times to retry a failed request
+ */
+const uint8_t MAX_RETRIES = 5;
+
+/**
  * Curent status of the system. We use this to decide which LEDs to turn on
  */
 SystemStatus current_status = BOOTING;
@@ -128,7 +133,6 @@ void post_measurements(void* pvParameters) {
   while (true) {
     uint64_t current_millis = esp_timer_get_time() / 1000;
     if ((current_millis - last_post) > MS_BETWEEN_POSTS) {
-      ESP_LOGE(TAG, "Sending request");
       last_post = current_millis;
       // TODO: save litters information somewhere so it can be sent again when
       // network comes back up
@@ -136,14 +140,22 @@ void post_measurements(void* pvParameters) {
       if (bs == nullptr) {
         ESP_LOGE(TAG, "Backend service is nullptr");
       } else {
-        current_status = SENDING_REQUEST;
-        int status_code = bs->post_measurement(wifi_config.id, litters);
-        switch (status_code) {
-          case 200:
-            current_status = WIFI_CONFIGURED;
-            break;
-          default:
-            current_status = REQUEST_FAILED;
+        uint8_t retry_count = 0;
+        bool success = false;
+        while (!success && retry_count < MAX_RETRIES) {
+          current_status = SENDING_REQUEST;
+          int status_code = bs->post_measurement(wifi_config.id, litters);
+          switch (status_code) {
+            case 200:
+              success = true;
+              current_status = WIFI_CONFIGURED;
+              ESP_LOGI(TAG, "Request succeeded");
+              break;
+            default:
+              retry_count++;
+              ESP_LOGE(TAG, "Request failed");
+              current_status = REQUEST_FAILED;
+          }
         }
       }
     }
