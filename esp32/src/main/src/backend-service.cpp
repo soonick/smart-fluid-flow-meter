@@ -168,7 +168,6 @@ void BackendService::init_wifi() {
   xSemaphoreTake(IP_SEMPH, portMAX_DELAY);
 }
 
-// TODO: Make sure everything is turned off
 void BackendService::deinit_wifi() {
   ESP_LOGI(TAG, "Turning off wifi");
   ESP_ERROR_CHECK(esp_wifi_stop());
