@@ -188,6 +188,7 @@
 			)
 		)
 		(symbol "Connector:Conn_01x03_Pin"
+			(pin_numbers hide)
 			(pin_names
 				(offset 1.016) hide)
 			(exclude_from_sim no)
@@ -1463,7 +1464,7 @@
 						)
 					)
 				)
-				(pin bidirectional line
+				(pin power_out line
 					(at -15.24 16.51 270)
 					(length 2.54)
 					(name "GND"
@@ -1682,6 +1683,94 @@
 		(color 0 0 0 0)
 		(uuid "d93d35f4-cba8-4cc1-bb23-96b0de105ba7")
 	)
+	(no_connect
+		(at 128.27 55.88)
+		(uuid "02713d26-20a1-449b-bb7a-bb2d2102ee59")
+	)
+	(no_connect
+		(at 128.27 81.28)
+		(uuid "078752dc-8614-4a42-9634-c4347c8dd5dc")
+	)
+	(no_connect
+		(at 95.25 68.58)
+		(uuid "08aaef90-1d12-4e4a-8c0d-f3505b9aff43")
+	)
+	(no_connect
+		(at 128.27 68.58)
+		(uuid "1bdfb24e-39cc-49c2-ab8d-ecabcc8b92f3")
+	)
+	(no_connect
+		(at 95.25 63.5)
+		(uuid "2522c694-dd48-4976-ace4-23b001d86a6f")
+	)
+	(no_connect
+		(at 95.25 66.04)
+		(uuid "264de319-8da1-4dac-9341-fbaf542637cc")
+	)
+	(no_connect
+		(at 128.27 48.26)
+		(uuid "2c5e8e78-0b28-4335-b1ac-d69d3a50b0b1")
+	)
+	(no_connect
+		(at 95.25 76.2)
+		(uuid "3165344f-d2c8-4f8e-b731-38804369605e")
+	)
+	(no_connect
+		(at 95.25 53.34)
+		(uuid "3816e62f-b117-4a09-a637-228e02d0d0bb")
+	)
+	(no_connect
+		(at 95.25 55.88)
+		(uuid "3f5d1994-f8f5-4d4f-9611-996991b2e807")
+	)
+	(no_connect
+		(at 95.25 73.66)
+		(uuid "504a2ee7-5b84-413e-ba12-e154bae13f78")
+	)
+	(no_connect
+		(at 128.27 76.2)
+		(uuid "5fb706ed-1277-4ecc-b556-ad1e218ee861")
+	)
+	(no_connect
+		(at 128.27 73.66)
+		(uuid "75aa6754-bd26-49c9-82a7-73b29e6201fb")
+	)
+	(no_connect
+		(at 128.27 53.34)
+		(uuid "7a51b1b7-0ca2-4f08-a60b-6851468b826f")
+	)
+	(no_connect
+		(at 95.25 45.72)
+		(uuid "7c8f8a52-1602-49e0-9bd7-e7fb2e18bb05")
+	)
+	(no_connect
+		(at 95.25 50.8)
+		(uuid "7da0c682-6c24-4912-b8bf-1a1092855b5f")
+	)
+	(no_connect
+		(at 95.25 48.26)
+		(uuid "88858676-55f3-423f-87ce-dd97cc36e9a1")
+	)
+	(no_connect
+		(at 128.27 63.5)
+		(uuid "94db893b-b293-41fe-9a88-62c9fa782a23")
+	)
+	(no_connect
+		(at 128.27 50.8)
+		(uuid "a6e6a156-d951-443b-85b9-001a825989bd")
+	)
+	(no_connect
+		(at 128.27 45.72)
+		(uuid "b2ba4c00-0b6c-4013-b678-d21b14b78476")
+	)
+	(no_connect
+		(at 128.27 66.04)
+		(uuid "f9e1d459-280a-49b6-b647-780f3004eb38")
+	)
+	(no_connect
+		(at 128.27 58.42)
+		(uuid "ff77a147-e87d-461e-b0ef-9318ccd82d32")
+	)
 	(wire
 		(pts
 			(xy 81.28 77.47) (xy 81.28 87.63)
@@ -1784,16 +1873,6 @@
 	)
 	(wire
 		(pts
-			(xy 140.97 73.66) (xy 144.78 73.66)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "60d4c531-d4f8-477f-961a-6736a94eede1")
-	)
-	(wire
-		(pts
 			(xy 72.39 48.26) (xy 76.2 48.26)
 		)
 		(stroke
@@ -1831,6 +1910,16 @@
 			(type default)
 		)
 		(uuid "7e0bdd0c-9082-45ef-b4c2-062977be4545")
+	)
+	(wire
+		(pts
+			(xy 140.97 76.2) (xy 144.78 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "82705295-f72a-4016-9087-e9d671570388")
 	)
 	(wire
 		(pts
@@ -1974,6 +2063,16 @@
 	)
 	(wire
 		(pts
+			(xy 140.97 73.66) (xy 144.78 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bee70572-d8fb-47d2-814c-acc393d93ae9")
+	)
+	(wire
+		(pts
 			(xy 74.93 77.47) (xy 81.28 77.47)
 		)
 		(stroke
@@ -2024,7 +2123,7 @@
 	)
 	(wire
 		(pts
-			(xy 144.78 76.2) (xy 144.78 87.63)
+			(xy 140.97 76.2) (xy 140.97 87.63)
 		)
 		(stroke
 			(width 0)
@@ -2034,7 +2133,7 @@
 	)
 	(wire
 		(pts
-			(xy 95.25 87.63) (xy 144.78 87.63)
+			(xy 95.25 87.63) (xy 140.97 87.63)
 		)
 		(stroke
 			(width 0)
@@ -2082,8 +2181,8 @@
 		)
 		(uuid "fec12ac0-e7e2-4c38-af73-384e5b267186")
 	)
-	(label "Black (GND)"
-		(at 132.08 76.2 0)
+	(label "Black (Gnd)"
+		(at 139.7 73.66 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2091,10 +2190,10 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "11b4b8e4-f740-49be-96da-cad3515d073c")
+		(uuid "29d3d2c6-5192-45da-ad97-c1747b847c34")
 	)
 	(label "Yellow (Data)"
-		(at 147.32 71.12 0)
+		(at 138.43 71.12 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2105,7 +2204,7 @@
 		(uuid "6e22e980-4e0c-44b2-8bab-db9b5217b559")
 	)
 	(label "Red (Vcc)"
-		(at 147.32 78.74 0)
+		(at 140.97 76.2 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2113,7 +2212,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "d2f2909c-b080-4a86-9f4a-c15ab5791d8c")
+		(uuid "c2cd61dc-fa98-4aa7-962e-32958bb27582")
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
