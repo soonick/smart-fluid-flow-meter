@@ -5,7 +5,6 @@
 
 TEST_CASE("Destructor") {
   SECTION("ssid and password are reset after destructing instance") {
-    // TODO: Change to reference?
     BackendService* bs =
         BackendService::get_instance("ssid_one", "password_one");
     REQUIRE(bs->get_ssid() == "ssid_one");
