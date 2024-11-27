@@ -95,6 +95,13 @@ const uint8_t MAX_RETRIES = 5;
 SystemStatus current_status = BOOTING;
 
 /**
+ * Since every time we call `get_volume`, the meter starts counting from 0, we
+ * use this variable to hold measurements that couldn't be sent (probably
+ * because of network issues)
+ */
+float litters_memory = 0;
+
+/**
  * Saves the wifi config and shuts down access point
  */
 void save_config(wm_config in) {
@@ -134,9 +141,7 @@ void post_measurements(void* pvParameters) {
     uint64_t current_millis = esp_timer_get_time() / 1000;
     if ((current_millis - last_post) > MS_BETWEEN_POSTS) {
       last_post = current_millis;
-      // TODO: save litters information somewhere so it can be sent again when
-      // network comes back up
-      const float litters = fluid_meter->get_volume();
+      const float litters = fluid_meter->get_volume() + litters_memory;
       if (bs == nullptr) {
         ESP_LOGE(TAG, "Backend service is nullptr");
       } else {
@@ -156,6 +161,12 @@ void post_measurements(void* pvParameters) {
               ESP_LOGE(TAG, "Request failed");
               current_status = REQUEST_FAILED;
           }
+        }
+
+        if (success) {
+          litters_memory = 0;
+        } else {
+          litters_memory = litters;
         }
       }
     }
