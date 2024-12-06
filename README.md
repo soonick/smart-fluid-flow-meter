@@ -13,12 +13,12 @@ Hardware and software for a system that monitors flow of fluids (most likely wat
 
 ### LED indicators
 
-Yellow - Device is booting
-Green, yellow and red - Device set to factory settings and waiting for configuration (See below for instructions to configure)
-Green - Device is configured and behaving correctly
-Green and yellow - Device is in the middle of sending a request to the back-end
-Red - Last request to back-end failed. This could be because configuration is incorrect, or the configured modem is unreachable
-None - This should not happen, it means something is very wrong
+- **Yellow** - Device is booting
+- **Green, yellow and red** - Device set to factory settings and waiting for configuration (See below for instructions to configure)
+- **Green** - Device is configured and behaving correctly
+- **Green and yellow** - Device is in the middle of sending a request to the back-end
+- **Red** - Last request to back-end failed. This could be because configuration is incorrect, or the configured modem is unreachable
+- **None** - This should not happen, it means something is very wrong
 
 ### Configuration
 
