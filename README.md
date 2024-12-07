@@ -4,10 +4,11 @@
 
 Hardware and software for a system that monitors flow of fluids (most likely water) and reports it to a back-end that can emit alerts based on configured preferences.
 
-- [esp32](/esp32/) - The ESP32 code that takes care of reading the sensor and posting measurements to the back-end
 - [backend](/backend/) - Contains the back end server where measurements will be posted
-- [kicad](/kicad/) - Electronic circuit schematic
 - [case](/case/) - 3d model of the PCB case
+- [esp32](/esp32/) - The ESP32 code that takes care of reading the sensor and posting measurements to the back-end
+- [frontend](/frontend/) - The front end that can be used to manage accounts and devices
+- [kicad](/kicad/) - Electronic circuit schematic
 
 ## User documentation
 
