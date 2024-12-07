@@ -1,0 +1,10 @@
+FROM node:23-alpine
+
+EXPOSE 5173
+
+COPY ./svelte-app /svelte-app
+
+WORKDIR /svelte-app
+RUN npm install
+
+CMD npm run dev
