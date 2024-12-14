@@ -1,4 +1,5 @@
 use crate::api::measurement::Measurement;
+use crate::api::user::User;
 use crate::storage::{error::Error, error::ErrorCode, Storage};
 
 use async_trait::async_trait;
@@ -10,6 +11,7 @@ use firestore::{
 use tracing::{error, info};
 
 const MEASUREMENT_COLLECTION: &'static str = "measurement";
+const USER_COLLECTION: &'static str = "user";
 
 #[derive(Clone)]
 pub struct FirestoreStorage {
@@ -160,5 +162,36 @@ impl Storage for FirestoreStorage {
                 });
             }
         };
+    }
+
+    /// Saves a new user to the DB. The user's e-mail still needs to be verified
+    /// before it can actually be used
+    async fn sign_up_user(&self, user: User) -> Result<User, Error> {
+        let inserted: User = match self
+            .db
+            .fluent()
+            .insert()
+            .into(USER_COLLECTION)
+            .document_id(user.id.clone())
+            .object(&user)
+            .execute()
+            .await
+        {
+            Ok(inserted) => inserted,
+            Err(DataConflictError(_)) => {
+                // Most likely, user already exists. Return an opaque error
+                return Err(Error {
+                    code: ErrorCode::UndefinedError,
+                });
+            }
+            Err(e) => {
+                error!("Error trying to insert user: {}", e);
+                return Err(Error {
+                    code: ErrorCode::UndefinedError,
+                });
+            }
+        };
+
+        return Ok(inserted);
     }
 }

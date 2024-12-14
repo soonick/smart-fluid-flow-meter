@@ -40,7 +40,7 @@ services:
         source: ../service-account-key.json
         target: /service-account-key.json
     command: >
-      sh -c "cargo test -- --nocapture"
+      sh -c "RUST_BACKTRACE=1 cargo test -- --nocapture"
 
   mysql:
     image: mysql:8.3.0

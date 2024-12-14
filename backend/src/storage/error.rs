@@ -1,5 +1,6 @@
 pub enum ErrorCode {
     UndefinedError,
+    DuplicateError,
 }
 
 pub struct Error {

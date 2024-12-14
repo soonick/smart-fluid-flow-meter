@@ -18,7 +18,22 @@ image-prod: image
 .PHONY: image-prod
 
 ssh: clean
-	@docker run --rm -it -p 3000:3000 -v $(PWD)/:/smart-fluid-flow-meter/ --name smart-fluid-flow-meter-backend-dev smart-fluid-flow-meter-backend-image bash
+	@docker run --rm -it \
+		-p 3000:3000 \
+		-v $(PWD)/Cargo.lock:/backend/Cargo.lock \
+		-v $(PWD)/Cargo.toml:/backend/Cargo.toml \
+		-v $(PWD)/Makefile:/backend/Makefile \
+		-v $(PWD)/README.md:/backend/README.md \
+		-v $(PWD)/build:/backend/build \
+		-v $(PWD)/assets:/backend/assets \
+		-v $(PWD)/dockerfiles:/backend/dockerfiles \
+		-v $(PWD)/src:/backend/src \
+		-v $(PWD)/tests:/backend/tests \
+		-v $(PWD)/dev-environments/vim/tmp:/root/.local/share/nvim \
+		-w /backend/ \
+		--name smart-fluid-flow-meter-backend-dev \
+		smart-fluid-flow-meter-backend-image \
+		bash
 .PHONY: ssh
 
 ssh-prod: image-prod
@@ -73,9 +88,11 @@ start-mysql:
 .PHONY: start-mysql
 
 # Starts a container with a neovim development environment ready to use
-vim:
+vim: image
 	@docker build -f dockerfiles/dev-vim -t smart-fluid-flow-meter-backend-vim-image .
 	@docker run --rm -it \
+		-v $(PWD)/Cargo.lock:/backend/Cargo.lock \
+		-v $(PWD)/Cargo.toml:/backend/Cargo.toml \
 		-v $(PWD)/Makefile:/backend/Makefile \
 		-v $(PWD)/README.md:/backend/README.md \
 		-v $(PWD)/build:/backend/build \

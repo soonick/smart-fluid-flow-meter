@@ -1,5 +1,7 @@
 use smart_fluid_flow_meter_backend::{
     api::measurement::SaveMeasurementInput,
+    helper::user::MockUserHelper,
+    settings::settings::Settings,
     storage::{firestore::FirestoreStorage, memory::MemoryStorage, mysql::MySqlStorage, Storage},
 };
 
@@ -7,6 +9,7 @@ use axum::{
     body::Body,
     http,
     http::{Request, StatusCode},
+    Router,
 };
 use chrono::{DateTime, Local};
 use http_body_util::BodyExt;
@@ -15,11 +18,18 @@ use std::sync::Arc;
 use test_log::test;
 use tower::util::ServiceExt;
 
+async fn create_memory_app() -> Router {
+    let settings = Arc::new(Settings::from_file(
+        "/smart-fluid-flow-meter/tests/config/default.yaml",
+    ));
+    let storage = Arc::new(MemoryStorage::new().await);
+    let user_helper = Arc::new(MockUserHelper::new());
+    return smart_fluid_flow_meter_backend::app(settings, storage, user_helper).await;
+}
+
 #[tokio::test]
 async fn save_measurement_invalid_json() {
-    let storage = Arc::new(MemoryStorage::new().await);
-    let app = smart_fluid_flow_meter_backend::app(storage).await;
-
+    let app = create_memory_app().await;
     let response = app
         .oneshot(
             Request::builder()
@@ -38,15 +48,13 @@ async fn save_measurement_invalid_json() {
     let body: Value = serde_json::from_slice(&body).unwrap();
     assert_eq!(
         body,
-        json!({ "code": "InvalidInput", "message": "Invalid input" })
+        json!({ "code": "InvalidInput", "data": "", "message": "Invalid input" })
     );
 }
 
 #[tokio::test]
 async fn save_measurement_success() {
-    let storage = Arc::new(MemoryStorage::new().await);
-    let app = smart_fluid_flow_meter_backend::app(storage).await;
-
+    let app = create_memory_app().await;
     let input = SaveMeasurementInput {
         device_id: "999".to_string(),
         measurement: "134".to_string(),
@@ -84,8 +92,7 @@ async fn save_measurement_success() {
 
 #[tokio::test]
 async fn save_measurement_database_failure() {
-    let storage = Arc::new(MemoryStorage::new().await);
-    let app = smart_fluid_flow_meter_backend::app(storage).await;
+    let app = create_memory_app().await;
 
     // There will be a failure because device_id is empty
     let input = SaveMeasurementInput {
@@ -108,16 +115,20 @@ async fn save_measurement_database_failure() {
     let body: Value = serde_json::from_slice(&body).unwrap();
     assert_eq!(
         body,
-        json!({ "code": "InternalError", "message": "We made a mistake. Sorry" })
+        json!({ "code": "InternalError", "data": "", "message": "We made a mistake. Sorry" })
     );
 }
 
 #[test(tokio::test)]
 async fn save_measurement_success_mysql() {
+    let settings = Arc::new(Settings::from_file(
+        "/smart-fluid-flow-meter/tests/config/default.yaml",
+    ));
     let storage = Arc::new(
         MySqlStorage::new("mysql://user:password@mysql/smart-fluid-flow-meter-backend").await,
     );
-    let app = smart_fluid_flow_meter_backend::app(storage).await;
+    let user_helper = Arc::new(MockUserHelper::new());
+    let app = smart_fluid_flow_meter_backend::app(settings, storage, user_helper).await;
 
     let input = SaveMeasurementInput {
         device_id: "999".to_string(),
@@ -157,8 +168,12 @@ async fn save_measurement_success_mysql() {
 
 #[test(tokio::test)]
 async fn save_measurement_success_firestore() {
+    let settings = Arc::new(Settings::from_file(
+        "/smart-fluid-flow-meter/tests/config/default.yaml",
+    ));
     let storage = Arc::new(FirestoreStorage::new("dummy-id", "db-id").await);
-    let app = smart_fluid_flow_meter_backend::app(storage).await;
+    let user_helper = Arc::new(MockUserHelper::new());
+    let app = smart_fluid_flow_meter_backend::app(settings, storage, user_helper).await;
 
     let input = SaveMeasurementInput {
         device_id: "999".to_string(),
@@ -198,8 +213,12 @@ async fn save_measurement_success_firestore() {
 
 #[tokio::test]
 async fn save_measurement_ignores_duplicate_firestore() {
+    let settings = Arc::new(Settings::from_file(
+        "/smart-fluid-flow-meter/tests/config/default.yaml",
+    ));
     let storage = Arc::new(FirestoreStorage::new("dummy-id", "db-id").await);
-    let app = smart_fluid_flow_meter_backend::app(storage.clone()).await;
+    let user_helper = Arc::new(MockUserHelper::new());
+    let app = smart_fluid_flow_meter_backend::app(settings, storage.clone(), user_helper).await;
 
     let input = SaveMeasurementInput {
         device_id: "666".to_string(),
@@ -235,7 +254,7 @@ async fn save_measurement_ignores_duplicate_firestore() {
 
     assert_eq!(response.status(), StatusCode::OK);
 
-    let found = match storage
+    match storage
         .get_measurements("666".to_string(), Local::now(), 10)
         .await
     {

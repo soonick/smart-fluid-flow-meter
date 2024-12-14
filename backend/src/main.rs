@@ -1,3 +1,4 @@
+use smart_fluid_flow_meter_backend::helper::user::DefaultUserHelper;
 use smart_fluid_flow_meter_backend::settings::settings::Settings;
 use smart_fluid_flow_meter_backend::storage::firestore::FirestoreStorage;
 use smart_fluid_flow_meter_backend::storage::mysql::MySqlStorage;
@@ -14,7 +15,8 @@ async fn main() {
         .with_line_number(true)
         .init();
 
-    let settings = Settings::new();
+    let settings = Arc::new(Settings::new());
+    let user_helper = Arc::new(DefaultUserHelper {});
 
     let storage: Arc<dyn Storage> = if !settings.database.firestore.project_id.is_empty() {
         Arc::new(
@@ -27,7 +29,7 @@ async fn main() {
     } else {
         Arc::new(MySqlStorage::new(&settings.database.mysql.connection_string).await)
     };
-    let app = smart_fluid_flow_meter_backend::app(storage).await;
+    let app = smart_fluid_flow_meter_backend::app(settings.clone(), storage, user_helper).await;
 
     let listener = TcpListener::bind(format!("0.0.0.0:{}", settings.service.port))
         .await

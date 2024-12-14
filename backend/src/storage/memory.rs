@@ -4,6 +4,7 @@
 //! restarts
 
 use crate::api::measurement::Measurement;
+use crate::api::user::User;
 use crate::storage::{
     error::{Error, ErrorCode},
     Storage,
@@ -20,12 +21,14 @@ pub struct MemoryStorage {
     // The key is the device id, the value is the measurements for that device,
     // ordered by insertion date (newest meaurements come later)
     measurement: Arc<Mutex<HashMap<String, Vec<Measurement>>>>,
+    user: Arc<Mutex<HashMap<String, User>>>,
 }
 
 impl MemoryStorage {
     pub async fn new() -> MemoryStorage {
         return MemoryStorage {
             measurement: Arc::new(Mutex::new(HashMap::new())),
+            user: Arc::new(Mutex::new(HashMap::new())),
         };
     }
 }
@@ -91,5 +94,27 @@ impl Storage for MemoryStorage {
                 return Ok(found);
             }
         }
+    }
+
+    async fn sign_up_user(&self, user: User) -> Result<User, Error> {
+        {
+            let key = format!("{}+{}", user.id, user.provider);
+            let u = Arc::clone(&self.user);
+            {
+                let users = u.lock().unwrap();
+                if users.contains_key(&key) {
+                    return Err(Error {
+                        code: ErrorCode::UndefinedError,
+                    });
+                }
+            }
+
+            {
+                let mut users = u.lock().unwrap();
+                users.insert(key, user.clone());
+            }
+        }
+
+        Ok(user)
     }
 }
