@@ -9,6 +9,7 @@ axum = { version = "0.7.5", features = ["macros"] }
 chrono = { version = "0.4.37", features = ["serde"] }
 config = "0.14.0"
 firestore = "0.42.0"
+reqwest = { version = "0.12.9", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }
 sqlx = { version = "0.7", features = [ "runtime-tokio", "tls-native-tls", "mysql" ] }
 tokio = { version = "1.0", features = ["full"] }

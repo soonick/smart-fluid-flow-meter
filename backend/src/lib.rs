@@ -1,6 +1,7 @@
 pub mod api;
 mod error;
 mod handler;
+pub mod http_client;
 mod json;
 pub mod settings;
 pub mod storage;
@@ -22,8 +23,8 @@ struct AppState {
 pub async fn app(storage: Arc<dyn Storage>) -> Router {
     let state = AppState { storage };
     Router::new()
-        .route("/measure", post(save_measure))
         .route("/health", get(health_check))
+        .route("/measure", post(save_measure))
         .with_state(state)
         .layer(
             TraceLayer::new_for_http()
