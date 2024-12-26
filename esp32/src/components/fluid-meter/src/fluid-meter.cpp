@@ -7,7 +7,7 @@ FluidMeter* FluidMeter::instance = nullptr;
 QueueHandle_t FluidMeter::queue;
 
 FluidMeter::FluidMeter(const gpio_num_t pin)
-    : meter_pin{pin}, conversion_factor{450} {
+    : meter_pin{pin}, conversion_factor{690} {
   queue = xQueueCreate(10, sizeof(char));
   xTaskCreate(queue_task, "queue_task", 2048, NULL, 10, NULL);
 
