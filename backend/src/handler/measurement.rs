@@ -1,4 +1,4 @@
-use crate::api::measure::{Measure, SaveMeasureInput};
+use crate::api::measurement::{Measurement, SaveMeasurementInput};
 use crate::error::app_error::AppError;
 use crate::json::extractor::Extractor;
 use crate::AppState;
@@ -9,20 +9,20 @@ use tracing::info;
 
 const ONE_MINUTE: i64 = 60;
 
-pub async fn save_measure(
+pub async fn save_measurement(
     State(state): State<AppState>,
-    Extractor(input): Extractor<SaveMeasureInput>,
-) -> Result<Extractor<Measure>, AppError> {
-    // If the same measure has been recorded recently, drop this one
+    Extractor(input): Extractor<SaveMeasurementInput>,
+) -> Result<Extractor<Measurement>, AppError> {
+    // If the same measurement has been recorded recently, drop this one
     let now = Local::now();
     let res = &state
         .storage
         .get_measurements(input.device_id.clone(), now, 1)
         .await?;
     if res.len() > 0 {
-        if res[0].measure == input.measure {
+        if res[0].measurement == input.measurement {
             info!(
-                "The same measure was last found {} seconds ago",
+                "The same measurement was last found {} seconds ago",
                 now.timestamp() - res[0].recorded_at.timestamp()
             );
             if now.timestamp() - res[0].recorded_at.timestamp() < ONE_MINUTE {
@@ -30,25 +30,25 @@ pub async fn save_measure(
             }
         } else {
             info!(
-                "The last measure was {} at {}",
-                res[0].measure,
+                "The last measurement was {} at {}",
+                res[0].measurement,
                 res[0].recorded_at.to_rfc3339()
             );
         }
     }
 
-    let measure = Measure {
+    let measurement = Measurement {
         id: None,
         device_id: input.device_id,
-        measure: input.measure,
+        measurement: input.measurement,
         recorded_at: now,
     };
-    let inserted = state.storage.save_measure(measure).await?;
+    let inserted = state.storage.save_measurement(measurement).await?;
 
-    Ok(Extractor(Measure {
+    Ok(Extractor(Measurement {
         id: inserted.id,
         device_id: inserted.device_id,
-        measure: inserted.measure,
+        measurement: inserted.measurement,
         recorded_at: inserted.recorded_at,
     }))
 }
