@@ -8,7 +8,7 @@ image-prod: image
 	@docker run --rm \
 		-v $(PWD)/Cargo.lock:/smart-fluid-flow-meter/Cargo.lock \
 		-v $(PWD)/Cargo.toml:/smart-fluid-flow-meter/Cargo.toml \
-		-v $(PWD)/assets/:/assets \
+		-v $(PWD)/assets/:/smart-fluid-flow-meter/assets \
 		-v $(PWD)/build/target:/smart-fluid-flow-meter/target \
 		-v $(PWD)/src:/smart-fluid-flow-meter/src \
 		-w /smart-fluid-flow-meter/ \
@@ -32,7 +32,7 @@ build: image
 	@docker run --rm -it -p 3000:3000 \
 		-v $(PWD)/Cargo.lock:/smart-fluid-flow-meter/Cargo.lock \
 		-v $(PWD)/Cargo.toml:/smart-fluid-flow-meter/Cargo.toml \
-		-v $(PWD)/assets/:/assets \
+		-v $(PWD)/assets/:/smart-fluid-flow-meter/assets \
 		-v $(PWD)/build/registry:/usr/local/cargo/registry \
 		-v $(PWD)/build/target:/smart-fluid-flow-meter/target \
 		-v $(PWD)/src:/smart-fluid-flow-meter/src \
@@ -46,7 +46,7 @@ start:
 	@docker run --rm -it -p 3000:3000 \
 		-v $(PWD)/Cargo.lock:/smart-fluid-flow-meter/Cargo.lock \
 		-v $(PWD)/Cargo.toml:/smart-fluid-flow-meter/Cargo.toml \
-		-v $(PWD)/assets/:/assets \
+		-v $(PWD)/assets/:/smart-fluid-flow-meter/assets \
 		-v $(PWD)/build/registry:/usr/local/cargo/registry \
 		-v $(PWD)/build/target:/smart-fluid-flow-meter/target \
 		-v $(PWD)/src:/smart-fluid-flow-meter/src \
