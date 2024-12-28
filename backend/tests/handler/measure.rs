@@ -247,3 +247,55 @@ async fn save_measure_success_firestore() {
         Local::now().timestamp_nanos_opt() > actual_date.expect("Bad date").timestamp_nanos_opt()
     );
 }
+
+#[tokio::test]
+async fn save_measure_ignores_duplicate_firestore() {
+    let storage = Arc::new(FirestoreStorage::new("dummy-id", "db-id").await);
+    let app = smart_fluid_flow_meter_backend::app(storage.clone()).await;
+
+    let input = SaveMeasureInput {
+        device_id: "666".to_string(),
+        measure: "3.781159".to_string(),
+    };
+    let response = app
+        .clone()
+        .oneshot(
+            Request::builder()
+                .method(http::Method::POST)
+                .uri("/measure")
+                .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
+                .body(Body::from(serde_json::to_string(&input).unwrap()))
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    // Send a duplicate request
+    let response = app
+        .oneshot(
+            Request::builder()
+                .method(http::Method::POST)
+                .uri("/measure")
+                .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
+                .body(Body::from(serde_json::to_string(&input).unwrap()))
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let found = match storage
+        .get_measurements("666".to_string(), Local::now(), 10)
+        .await
+    {
+        Ok(f) => f,
+        Err(_) => {
+            panic!("Error getting measurements from db");
+        }
+    };
+
+    assert_eq!(found.len(), 1);
+}
