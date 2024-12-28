@@ -1,4 +1,4 @@
-use crate::api::measure::Measure;
+use crate::api::measurement::Measurement;
 use crate::storage::{error::Error, error::ErrorCode, Storage};
 
 use async_trait::async_trait;
@@ -6,7 +6,7 @@ use chrono::{DateTime, Local};
 use firestore::{path, FirestoreDb, FirestoreDbOptions, FirestoreQueryDirection};
 use tracing::error;
 
-const MEASURE_COLLECTION: &'static str = "measure";
+const MEASUREMENT_COLLECTION: &'static str = "measurement";
 
 #[derive(Clone)]
 pub struct FirestoreStorage {
@@ -34,15 +34,16 @@ impl FirestoreStorage {
 
 #[async_trait]
 impl Storage for FirestoreStorage {
-    // The id of the passed measure is ignored. An id will be assigned automtically
-    async fn save_measure(&self, measure: Measure) -> Result<Measure, Error> {
-        let inserted: Measure = match self
+    // The id of the passed measurement is ignored. An id will be assigned automtically
+    // We only allow saving at most on
+    async fn save_measurement(&self, measurement: Measurement) -> Result<Measurement, Error> {
+        let inserted: Measurement = match self
             .db
             .fluent()
             .insert()
-            .into(MEASURE_COLLECTION)
+            .into(MEASUREMENT_COLLECTION)
             .generate_document_id()
-            .object(&measure)
+            .object(&measurement)
             .execute()
             .await
         {
@@ -55,9 +56,9 @@ impl Storage for FirestoreStorage {
             }
         };
 
-        Ok(Measure {
+        Ok(Measurement {
             id: inserted.id,
-            ..measure
+            ..measurement
         })
     }
 
@@ -66,21 +67,21 @@ impl Storage for FirestoreStorage {
         device_id: String,
         since: DateTime<Local>,
         num_records: u32,
-    ) -> Result<Vec<Measure>, Error> {
+    ) -> Result<Vec<Measurement>, Error> {
         match self
             .db
             .fluent()
             .select()
-            .from(MEASURE_COLLECTION)
+            .from(MEASUREMENT_COLLECTION)
             .filter(|q| {
                 q.for_all([
-                    q.field(path!(Measure::device_id)).eq(device_id.clone()),
-                    q.field(path!(Measure::recorded_at))
+                    q.field(path!(Measurement::device_id)).eq(device_id.clone()),
+                    q.field(path!(Measurement::recorded_at))
                         .less_than_or_equal(since),
                 ])
             })
             .order_by([(
-                path!(Measure::recorded_at),
+                path!(Measurement::recorded_at),
                 FirestoreQueryDirection::Descending,
             )])
             .limit(num_records)

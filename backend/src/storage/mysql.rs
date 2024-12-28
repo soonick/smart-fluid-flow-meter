@@ -1,4 +1,4 @@
-use crate::api::measure::Measure;
+use crate::api::measurement::Measurement;
 use crate::storage::{error::Error, error::ErrorCode, Storage};
 
 use async_trait::async_trait;
@@ -38,14 +38,14 @@ impl MySqlStorage {
 
 #[async_trait]
 impl Storage for MySqlStorage {
-    // The id of the passed measure is ignored. An id will be assigned automatically
-    async fn save_measure(&self, measure: Measure) -> Result<Measure, Error> {
+    // The id of the passed measurement is ignored. An id will be assigned automatically
+    async fn save_measurement(&self, measurement: Measurement) -> Result<Measurement, Error> {
         let inserted = match sqlx::query(
-            "INSERT INTO measurement(device_id, measure, recorded_at) VALUES(?, ?, ?)",
+            "INSERT INTO measurement(device_id, measurement, recorded_at) VALUES(?, ?, ?)",
         )
-        .bind(measure.device_id.clone())
-        .bind(measure.measure.clone())
-        .bind(measure.recorded_at.to_rfc3339())
+        .bind(measurement.device_id.clone())
+        .bind(measurement.measurement.clone())
+        .bind(measurement.recorded_at.to_rfc3339())
         .execute(&self.pool)
         .await
         {
@@ -58,9 +58,9 @@ impl Storage for MySqlStorage {
             }
         };
 
-        Ok(Measure {
+        Ok(Measurement {
             id: Some(inserted.last_insert_id().to_string()),
-            ..measure
+            ..measurement
         })
     }
 
@@ -69,13 +69,13 @@ impl Storage for MySqlStorage {
         device_id: String,
         since: DateTime<Local>,
         num_records: u32,
-    ) -> Result<Vec<Measure>, Error> {
+    ) -> Result<Vec<Measurement>, Error> {
         match sqlx::query_as(
             r#"
             SELECT
                 id,
                 device_id,
-                measure,
+                measurement,
                 recorded_at
             FROM measurement
             WHERE

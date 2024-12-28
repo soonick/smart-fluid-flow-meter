@@ -1,5 +1,5 @@
 use smart_fluid_flow_meter_backend::{
-    api::measure::SaveMeasureInput,
+    api::measurement::SaveMeasurementInput,
     storage::{firestore::FirestoreStorage, memory::MemoryStorage, mysql::MySqlStorage, Storage},
 };
 
@@ -16,7 +16,7 @@ use test_log::test;
 use tower::util::ServiceExt;
 
 #[tokio::test]
-async fn save_measure_invalid_json() {
+async fn save_measurement_invalid_json() {
     let storage = Arc::new(MemoryStorage::new().await);
     let app = smart_fluid_flow_meter_backend::app(storage).await;
 
@@ -24,7 +24,7 @@ async fn save_measure_invalid_json() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/measure")
+                .uri("/measurement")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from("{}"))
                 .unwrap(),
@@ -43,19 +43,19 @@ async fn save_measure_invalid_json() {
 }
 
 #[tokio::test]
-async fn save_measure_success() {
+async fn save_measurement_success() {
     let storage = Arc::new(MemoryStorage::new().await);
     let app = smart_fluid_flow_meter_backend::app(storage).await;
 
-    let input = SaveMeasureInput {
+    let input = SaveMeasurementInput {
         device_id: "999".to_string(),
-        measure: "134".to_string(),
+        measurement: "134".to_string(),
     };
     let response = app
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/measure")
+                .uri("/measurement")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -73,8 +73,8 @@ async fn save_measure_success() {
         input.device_id
     );
     assert_eq!(
-        body.get("measure").unwrap().as_str().unwrap(),
-        input.measure
+        body.get("measurement").unwrap().as_str().unwrap(),
+        input.measurement
     );
     let actual_date =
         DateTime::parse_from_rfc3339(body.get("recorded_at").unwrap().as_str().unwrap())
@@ -83,20 +83,20 @@ async fn save_measure_success() {
 }
 
 #[tokio::test]
-async fn save_measure_ignores_duplicate() {
+async fn save_measurement_ignores_duplicate() {
     let storage = Arc::new(MemoryStorage::new().await);
     let app = smart_fluid_flow_meter_backend::app(storage.clone()).await;
 
-    let input = SaveMeasureInput {
+    let input = SaveMeasurementInput {
         device_id: "666".to_string(),
-        measure: "12345".to_string(),
+        measurement: "12345".to_string(),
     };
     let response = app
         .clone()
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/measure")
+                .uri("/measurement")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -111,7 +111,7 @@ async fn save_measure_ignores_duplicate() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/measure")
+                .uri("/measurement")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -135,20 +135,20 @@ async fn save_measure_ignores_duplicate() {
 }
 
 #[tokio::test]
-async fn save_measure_database_failure() {
+async fn save_measurement_database_failure() {
     let storage = Arc::new(MemoryStorage::new().await);
     let app = smart_fluid_flow_meter_backend::app(storage).await;
 
     // There will be a failure because device_id is empty
-    let input = SaveMeasureInput {
+    let input = SaveMeasurementInput {
         device_id: "".to_string(),
-        measure: "134".to_string(),
+        measurement: "134".to_string(),
     };
     let response = app
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/measure")
+                .uri("/measurement")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -165,21 +165,21 @@ async fn save_measure_database_failure() {
 }
 
 #[test(tokio::test)]
-async fn save_measure_success_mysql() {
+async fn save_measurement_success_mysql() {
     let storage = Arc::new(
         MySqlStorage::new("mysql://user:password@mysql/smart-fluid-flow-meter-backend").await,
     );
     let app = smart_fluid_flow_meter_backend::app(storage).await;
 
-    let input = SaveMeasureInput {
+    let input = SaveMeasurementInput {
         device_id: "999".to_string(),
-        measure: "134".to_string(),
+        measurement: "134".to_string(),
     };
     let response = app
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/measure")
+                .uri("/measurement")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -197,8 +197,8 @@ async fn save_measure_success_mysql() {
         input.device_id
     );
     assert_eq!(
-        body.get("measure").unwrap().as_str().unwrap(),
-        input.measure
+        body.get("measurement").unwrap().as_str().unwrap(),
+        input.measurement
     );
     let actual_date =
         DateTime::parse_from_rfc3339(body.get("recorded_at").unwrap().as_str().unwrap());
@@ -208,19 +208,19 @@ async fn save_measure_success_mysql() {
 }
 
 #[test(tokio::test)]
-async fn save_measure_success_firestore() {
+async fn save_measurement_success_firestore() {
     let storage = Arc::new(FirestoreStorage::new("dummy-id", "db-id").await);
     let app = smart_fluid_flow_meter_backend::app(storage).await;
 
-    let input = SaveMeasureInput {
+    let input = SaveMeasurementInput {
         device_id: "999".to_string(),
-        measure: "134".to_string(),
+        measurement: "134".to_string(),
     };
     let response = app
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/measure")
+                .uri("/measurement")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -238,8 +238,8 @@ async fn save_measure_success_firestore() {
         input.device_id
     );
     assert_eq!(
-        body.get("measure").unwrap().as_str().unwrap(),
-        input.measure
+        body.get("measurement").unwrap().as_str().unwrap(),
+        input.measurement
     );
     let actual_date =
         DateTime::parse_from_rfc3339(body.get("recorded_at").unwrap().as_str().unwrap());
@@ -249,20 +249,20 @@ async fn save_measure_success_firestore() {
 }
 
 #[tokio::test]
-async fn save_measure_ignores_duplicate_firestore() {
+async fn save_measurement_ignores_duplicate_firestore() {
     let storage = Arc::new(FirestoreStorage::new("dummy-id", "db-id").await);
     let app = smart_fluid_flow_meter_backend::app(storage.clone()).await;
 
-    let input = SaveMeasureInput {
+    let input = SaveMeasurementInput {
         device_id: "666".to_string(),
-        measure: "3.781159".to_string(),
+        measurement: "3.781159".to_string(),
     };
     let response = app
         .clone()
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/measure")
+                .uri("/measurement")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -277,7 +277,7 @@ async fn save_measure_ignores_duplicate_firestore() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/measure")
+                .uri("/measurement")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),

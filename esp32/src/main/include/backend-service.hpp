@@ -43,7 +43,7 @@ class BackendService {
 
  private:
   static const char* BACKEND_URL;
-  static const char* MEASURE_API;
+  static const char* MEASUREMENT_API;
   static const char* TAG;
 
   static BackendService* instance;
