@@ -17,7 +17,7 @@ LAST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
 
 # Build docker image
 cd backend
-make build-prod
+make image-prod
 
 # Publish docker image
 docker tag $IMAGE_NAME $REGISTRY_URL/$PROJECT/$REPOSITORY/$IMAGE_NAME:$LAST_TAG
