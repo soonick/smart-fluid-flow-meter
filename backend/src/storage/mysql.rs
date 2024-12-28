@@ -2,6 +2,7 @@ use crate::api::measure::Measure;
 use crate::storage::{error::Error, error::ErrorCode, Storage};
 
 use async_trait::async_trait;
+use chrono::{DateTime, Local};
 use sqlx::mysql::{MySql, MySqlPoolOptions};
 use sqlx::Pool;
 use tracing::error;
@@ -61,5 +62,43 @@ impl Storage for MySqlStorage {
             id: Some(inserted.last_insert_id().to_string()),
             ..measure
         })
+    }
+
+    async fn get_measurements(
+        &self,
+        device_id: String,
+        since: DateTime<Local>,
+        num_records: u32,
+    ) -> Result<Vec<Measure>, Error> {
+        match sqlx::query_as(
+            r#"
+            SELECT
+                id,
+                device_id,
+                measure,
+                recorded_at
+            FROM measurement
+            WHERE
+                device_id = ? AND
+                recorded_at <= ?
+            LIMIT ?
+        "#,
+        )
+        .bind(device_id.clone())
+        .bind(since.to_rfc3339())
+        .bind(num_records)
+        .fetch_all(&self.pool)
+        .await
+        {
+            Ok(found) => {
+                return Ok(found);
+            }
+            Err(err) => {
+                error!("Error: {}", err);
+                return Err(Error {
+                    code: ErrorCode::UndefinedError,
+                });
+            }
+        };
     }
 }

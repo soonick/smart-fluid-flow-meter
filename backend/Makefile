@@ -1,10 +1,10 @@
-build:
+image:
 	@mkdir -p build/target
 	@mkdir -p build/registry
 	@docker build -f dockerfiles/dev -t smart-fluid-flow-meter-backend-image .
-.PHONY: build
+.PHONY: image
 
-build-prod: build
+image-prod: image
 	@docker run --rm \
 		-v $(PWD)/Cargo.lock:/smart-fluid-flow-meter/Cargo.lock \
 		-v $(PWD)/Cargo.toml:/smart-fluid-flow-meter/Cargo.toml \
@@ -21,12 +21,26 @@ ssh: clean
 	@docker run --rm -it -p 3000:3000 -v $(PWD)/:/smart-fluid-flow-meter/ --name smart-fluid-flow-meter-backend-dev smart-fluid-flow-meter-backend-image bash
 .PHONY: ssh
 
-ssh-prod: build-prod
+ssh-prod: image-prod
 	@docker run --rm -it -p 3000:3000 \
 		--name smart-fluid-flow-meter-backend-prod-ssh \
 		smart-fluid-flow-meter-backend-image-prod \
 		bash
 .PHONY: ssh-prod
+
+build: image
+	@docker run --rm -it -p 3000:3000 \
+		-v $(PWD)/Cargo.lock:/smart-fluid-flow-meter/Cargo.lock \
+		-v $(PWD)/Cargo.toml:/smart-fluid-flow-meter/Cargo.toml \
+		-v $(PWD)/assets/:/assets \
+		-v $(PWD)/build/registry:/usr/local/cargo/registry \
+		-v $(PWD)/build/target:/smart-fluid-flow-meter/target \
+		-v $(PWD)/src:/smart-fluid-flow-meter/src \
+		-w /smart-fluid-flow-meter/ \
+		--name smart-fluid-flow-meter-backend-dev \
+		smart-fluid-flow-meter-backend-image \
+		cargo build
+.PHONY: build
 
 start:
 	@docker run --rm -it -p 3000:3000 \
@@ -43,7 +57,7 @@ start:
 		cargo run
 .PHONY: start
 
-start-prod: build-prod
+start-prod: image-prod
 	@docker run --rm -it -p 3000:3000 \
 		-e GOOGLE_APPLICATION_CREDENTIALS=/service-account-key.json \
 		--env-file .env \
@@ -66,7 +80,7 @@ vim:
 		-v $(PWD)/README.md:/backend/README.md \
 		-v $(PWD)/build:/backend/build \
 		-v $(PWD)/assets:/backend/assets \
-		-v $(PWD)/dockerfile:/backend/dockerfiles \
+		-v $(PWD)/dockerfiles:/backend/dockerfiles \
 		-v $(PWD)/src:/backend/src \
 		-v $(PWD)/tests:/backend/tests \
 		-v $(PWD)/dev-environments/vim/tmp:/root/.local/share/nvim \
@@ -90,7 +104,7 @@ check-format:
 	@docker run --rm -v $(PWD)/:/smart-fluid-flow-meter/ -w /smart-fluid-flow-meter/ smart-fluid-flow-meter-backend-image cargo fmt --check
 .PHONY: check-format
 
-verify: clean build build-prod check-format test
+verify: clean build image-prod check-format test
 .PHONY: verify
 
 clean:

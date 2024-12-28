@@ -2,8 +2,8 @@ use crate::api::measure::Measure;
 use crate::storage::{error::Error, error::ErrorCode, Storage};
 
 use async_trait::async_trait;
-use firestore::FirestoreDb;
-use firestore::FirestoreDbOptions;
+use chrono::{DateTime, Local};
+use firestore::{path, FirestoreDb, FirestoreDbOptions, FirestoreQueryDirection};
 use tracing::error;
 
 const MEASURE_COLLECTION: &'static str = "measure";
@@ -59,5 +59,44 @@ impl Storage for FirestoreStorage {
             id: inserted.id,
             ..measure
         })
+    }
+
+    async fn get_measurements(
+        &self,
+        device_id: String,
+        since: DateTime<Local>,
+        num_records: u32,
+    ) -> Result<Vec<Measure>, Error> {
+        match self
+            .db
+            .fluent()
+            .select()
+            .from(MEASURE_COLLECTION)
+            .filter(|q| {
+                q.for_all([
+                    q.field(path!(Measure::device_id)).eq(device_id.clone()),
+                    q.field(path!(Measure::recorded_at))
+                        .less_than_or_equal(since),
+                ])
+            })
+            .order_by([(
+                path!(Measure::recorded_at),
+                FirestoreQueryDirection::Descending,
+            )])
+            .limit(num_records)
+            .obj()
+            .query()
+            .await
+        {
+            Ok(found) => {
+                return Ok(found);
+            }
+            Err(err) => {
+                error!("Error: {}", err);
+                return Err(Error {
+                    code: ErrorCode::UndefinedError,
+                });
+            }
+        };
     }
 }

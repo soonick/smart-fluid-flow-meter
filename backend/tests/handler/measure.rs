@@ -1,3 +1,8 @@
+use smart_fluid_flow_meter_backend::{
+    api::measure::SaveMeasureInput,
+    storage::{firestore::FirestoreStorage, memory::MemoryStorage, mysql::MySqlStorage, Storage},
+};
+
 use axum::{
     body::Body,
     http,
@@ -6,10 +11,6 @@ use axum::{
 use chrono::{DateTime, Local};
 use http_body_util::BodyExt;
 use serde_json::{json, Value};
-use smart_fluid_flow_meter_backend::{
-    api::measure::SaveMeasureInput,
-    storage::{firestore::FirestoreStorage, memory::MemoryStorage, mysql::MySqlStorage},
-};
 use std::sync::Arc;
 use test_log::test;
 use tower::util::ServiceExt;
@@ -82,13 +83,13 @@ async fn save_measure_success() {
 }
 
 #[tokio::test]
-async fn save_measure_database_failure() {
+async fn save_measure_ignores_duplicate() {
     let storage = Arc::new(MemoryStorage::new().await);
-    let app = smart_fluid_flow_meter_backend::app(storage).await;
+    let app = smart_fluid_flow_meter_backend::app(storage.clone()).await;
 
     let input = SaveMeasureInput {
-        device_id: "999".to_string(),
-        measure: "134".to_string(),
+        device_id: "666".to_string(),
+        measure: "12345".to_string(),
     };
     let response = app
         .clone()
@@ -105,7 +106,44 @@ async fn save_measure_database_failure() {
 
     assert_eq!(response.status(), StatusCode::OK);
 
-    // Try to insert with the same id so there is a failure
+    // Send a duplicate request
+    let response = app
+        .oneshot(
+            Request::builder()
+                .method(http::Method::POST)
+                .uri("/measure")
+                .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
+                .body(Body::from(serde_json::to_string(&input).unwrap()))
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let found = match storage
+        .get_measurements("666".to_string(), Local::now(), 10)
+        .await
+    {
+        Ok(f) => f,
+        Err(_) => {
+            panic!("Error getting measurements from db");
+        }
+    };
+
+    assert_eq!(found.len(), 1);
+}
+
+#[tokio::test]
+async fn save_measure_database_failure() {
+    let storage = Arc::new(MemoryStorage::new().await);
+    let app = smart_fluid_flow_meter_backend::app(storage).await;
+
+    // There will be a failure because device_id is empty
+    let input = SaveMeasureInput {
+        device_id: "".to_string(),
+        measure: "134".to_string(),
+    };
     let response = app
         .oneshot(
             Request::builder()
