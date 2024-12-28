@@ -5,6 +5,7 @@ use crate::AppState;
 
 use axum::extract::State;
 use chrono::Local;
+use tracing::info;
 
 const ONE_MINUTE: i64 = 60;
 
@@ -18,11 +19,22 @@ pub async fn save_measure(
         .storage
         .get_measurements(input.device_id.clone(), now, 1)
         .await?;
-    if res.len() > 0
-        && res[0].measure == input.measure
-        && now.timestamp() - res[0].recorded_at.timestamp() < ONE_MINUTE
-    {
-        return Ok(Extractor(res[0].clone()));
+    if res.len() > 0 {
+        if res[0].measure == input.measure {
+            info!(
+                "The same measure was last found {} seconds ago",
+                now.timestamp() - res[0].recorded_at.timestamp()
+            );
+            if now.timestamp() - res[0].recorded_at.timestamp() < ONE_MINUTE {
+                return Ok(Extractor(res[0].clone()));
+            }
+        } else {
+            info!(
+                "The last measure was {} at {}",
+                res[0].measure,
+                res[0].recorded_at.to_rfc3339()
+            );
+        }
     }
 
     let measure = Measure {
