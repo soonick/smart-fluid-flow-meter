@@ -7,7 +7,7 @@ pub struct SaveMeasureInput {
     pub measure: String,
 }
 
-#[derive(Clone, Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize, sqlx::FromRow)]
 pub struct Measure {
     #[serde(alias = "_firestore_id")]
     pub id: Option<String>,

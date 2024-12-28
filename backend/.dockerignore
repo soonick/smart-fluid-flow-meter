@@ -1,2 +1,4 @@
 Makefile
 dockerfiles/
+build/registry
+build/target/debug
