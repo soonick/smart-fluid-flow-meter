@@ -83,58 +83,6 @@ async fn save_measurement_success() {
 }
 
 #[tokio::test]
-async fn save_measurement_ignores_duplicate() {
-    let storage = Arc::new(MemoryStorage::new().await);
-    let app = smart_fluid_flow_meter_backend::app(storage.clone()).await;
-
-    let input = SaveMeasurementInput {
-        device_id: "666".to_string(),
-        measurement: "12345".to_string(),
-    };
-    let response = app
-        .clone()
-        .oneshot(
-            Request::builder()
-                .method(http::Method::POST)
-                .uri("/measurement")
-                .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
-                .body(Body::from(serde_json::to_string(&input).unwrap()))
-                .unwrap(),
-        )
-        .await
-        .unwrap();
-
-    assert_eq!(response.status(), StatusCode::OK);
-
-    // Send a duplicate request
-    let response = app
-        .oneshot(
-            Request::builder()
-                .method(http::Method::POST)
-                .uri("/measurement")
-                .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
-                .body(Body::from(serde_json::to_string(&input).unwrap()))
-                .unwrap(),
-        )
-        .await
-        .unwrap();
-
-    assert_eq!(response.status(), StatusCode::OK);
-
-    let found = match storage
-        .get_measurements("666".to_string(), Local::now(), 10)
-        .await
-    {
-        Ok(f) => f,
-        Err(_) => {
-            panic!("Error getting measurements from db");
-        }
-    };
-
-    assert_eq!(found.len(), 1);
-}
-
-#[tokio::test]
 async fn save_measurement_database_failure() {
     let storage = Arc::new(MemoryStorage::new().await);
     let app = smart_fluid_flow_meter_backend::app(storage).await;
@@ -291,11 +239,11 @@ async fn save_measurement_ignores_duplicate_firestore() {
         .get_measurements("666".to_string(), Local::now(), 10)
         .await
     {
-        Ok(f) => f,
+        Ok(f) => {
+            assert_eq!(f.len(), 1);
+        }
         Err(_) => {
             panic!("Error getting measurements from db");
         }
     };
-
-    assert_eq!(found.len(), 1);
 }
