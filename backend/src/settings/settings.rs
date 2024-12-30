@@ -1,4 +1,4 @@
-use config::{Config, Environment};
+use config::{Config, Environment, File, FileFormat};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -24,17 +24,37 @@ pub struct Database {
 }
 
 #[derive(Debug, Deserialize)]
+pub struct Captcha {
+    pub secret: String,
+}
+
+#[derive(Debug, Deserialize)]
 pub struct Settings {
-    pub service: Service,
+    pub captcha: Captcha,
     pub database: Database,
+    pub service: Service,
 }
 
 impl Settings {
     pub fn new() -> Self {
         let s = match Config::builder()
-            // Add in settings from the environment (with a prefix of APP)
-            // Eg.. `APP_DEBUG=1` would set the `debug` key
             .add_source(Environment::with_prefix("APP").separator("__"))
+            .build()
+        {
+            Ok(s) => s,
+            Err(err) => panic!("Couldn't build configuration. Error: {}", err),
+        };
+
+        match s.try_deserialize() {
+            Ok(s) => s,
+            Err(err) => panic!("Couldn't deserialize configuration. Error: {}", err),
+        }
+    }
+
+    // Creates a configuration from a given file. Used for testing
+    pub fn from_file(config_path: &str) -> Self {
+        let s = match Config::builder()
+            .add_source(File::new(config_path, FileFormat::Yaml))
             .build()
         {
             Ok(s) => s,

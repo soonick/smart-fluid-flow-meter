@@ -1,9 +1,11 @@
 use crate::api::measurement::Measurement;
+use crate::api::user::User;
 use crate::storage::{error::Error, error::ErrorCode, Storage};
 
 use async_trait::async_trait;
 use chrono::{DateTime, Local};
 use sqlx::mysql::{MySql, MySqlPoolOptions};
+use sqlx::Error::Database;
 use sqlx::Pool;
 use tracing::error;
 use tracing::info;
@@ -95,6 +97,48 @@ impl Storage for MySqlStorage {
             }
             Err(err) => {
                 error!("Error: {}", err);
+                return Err(Error {
+                    code: ErrorCode::UndefinedError,
+                });
+            }
+        };
+    }
+
+    /// Saves a new user to the database. Expects the password to be already
+    /// hashed
+    async fn sign_up_user(&self, user: User) -> Result<User, Error> {
+        let _inserted = match sqlx::query(
+            r#"INSERT INTO user(
+                id,
+                provider,
+                email,
+                password,
+                recorded_at
+            ) VALUES(?, ?, ?, ?, ?)"#,
+        )
+        .bind(user.id.clone())
+        .bind(user.provider.to_string())
+        .bind(user.email.clone())
+        .bind(user.password.clone())
+        .bind(user.recorded_at.to_rfc3339())
+        .execute(&self.pool)
+        .await
+        {
+            Ok(_) => {
+                return Ok(user);
+            }
+            Err(Database(e)) => {
+                // If it's a unique violation, it means it's a user error and
+                // there is no need to log
+                if !e.is_unique_violation() {
+                    error!("Error signing up user: {}", e);
+                }
+                return Err(Error {
+                    code: ErrorCode::UndefinedError,
+                });
+            }
+            Err(e) => {
+                error!("Error signing up user: {}", e);
                 return Err(Error {
                     code: ErrorCode::UndefinedError,
                 });

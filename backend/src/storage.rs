@@ -4,6 +4,7 @@ pub mod memory;
 pub mod mysql;
 
 use crate::api::measurement::Measurement;
+use crate::api::user::User;
 
 use async_trait::async_trait;
 use chrono::{DateTime, Local};
@@ -18,4 +19,7 @@ pub trait Storage: Send + Sync {
         since: DateTime<Local>,
         num_records: u32,
     ) -> Result<Vec<Measurement>, error::Error>;
+
+    // ----- User ----- //
+    async fn sign_up_user(&self, user: User) -> Result<User, error::Error>;
 }
