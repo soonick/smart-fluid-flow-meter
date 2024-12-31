@@ -1,9 +1,17 @@
 <script lang="ts">
+	import { zxcvbn } from '@zxcvbn-ts/core';
+
 	function login(e: Event) {
 		const form = document.getElementById('login-form') as HTMLFormElement;
+		const password = document.getElementById('password') as HTMLFormElement;
 
+		password.setCustomValidity('');
 		if (form.checkValidity()) {
-			alert('is valid');
+			password.setCustomValidity('');
+			if (zxcvbn(password.value).score < 3) {
+				password.setCustomValidity('Password is too weak');
+				return;
+			}
 		} else {
 			form.reportValidity();
 		}
