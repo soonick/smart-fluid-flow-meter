@@ -4,4 +4,6 @@ EXPOSE 5173
 
 WORKDIR /svelte-app
 
-CMD npm run dev
+RUN npm install -g npm@11.0.0
+
+CMD ["npm", "run", "dev"]
