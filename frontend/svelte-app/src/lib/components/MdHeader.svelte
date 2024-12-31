@@ -4,9 +4,9 @@
 <header>Mekadomus</header>
 
 <style>
-	header {
-		background: var(--primary-color);
-		padding: 1rem;
-		color: var(--secondary-color-weak);
-	}
+  header {
+    background: var(--primary-color);
+    padding: 1rem;
+    color: var(--secondary-color-weak);
+  }
 </style>
