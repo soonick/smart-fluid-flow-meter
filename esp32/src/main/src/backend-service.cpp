@@ -139,6 +139,19 @@ void BackendService::got_ip_handler(void* arg,
   xSemaphoreGive(IP_SEMPH);
 }
 
+void BackendService::wifi_disconnected_handler(void* arg,
+                                               esp_event_base_t event_base,
+                                               int32_t event_id,
+                                               void* event_data) {
+  (void)arg;
+  (void)event_base;
+  (void)event_id;
+  (void)event_data;
+
+  ESP_LOGI(TAG, "Wifi disconnected");
+  xSemaphoreGive(IP_SEMPH);
+}
+
 void BackendService::init_wifi() {
   // Start wifi stack
   esp_netif_init();
@@ -162,6 +175,9 @@ void BackendService::init_wifi() {
 
   ESP_ERROR_CHECK(esp_event_handler_register(
       IP_EVENT, IP_EVENT_STA_GOT_IP, &BackendService::got_ip_handler, NULL));
+  ESP_ERROR_CHECK(esp_event_handler_register(
+      WIFI_EVENT, WIFI_EVENT_STA_DISCONNECTED,
+      &BackendService::wifi_disconnected_handler, NULL));
 
   esp_wifi_connect();
 
