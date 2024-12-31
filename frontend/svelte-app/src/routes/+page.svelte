@@ -1,24 +1,59 @@
 <script lang="ts">
+  import { TurnstileSiteKey } from '../lib/utils/Constants';
+  import { httpPost } from '../lib/utils/HttpClient';
   import { zxcvbn } from '@zxcvbn-ts/core';
 
-  function login(e: Event) {
+  let captchaError = $state(false);
+
+  async function login(e: Event) {
+    e.preventDefault();
+    captchaError = false;
+
     const form = document.getElementById('login-form') as HTMLFormElement;
+    const email = document.getElementById('email') as HTMLFormElement;
     const password = document.getElementById('password') as HTMLFormElement;
 
     password.setCustomValidity('');
-    if (form.checkValidity()) {
-      password.setCustomValidity('');
-      if (zxcvbn(password.value).score < 3) {
-        password.setCustomValidity('Password is too weak');
-        return;
-      }
-    } else {
+    if (!form.checkValidity()) {
       form.reportValidity();
+      return;
     }
 
-    e.preventDefault();
+    password.setCustomValidity('');
+    if (zxcvbn(password.value).score < 3) {
+      password.setCustomValidity('Password is too weak');
+      return;
+    }
+
+    let token = '';
+    if (!turnstile) {
+      captchaError = true;
+      return;
+    } else {
+      token = turnstile.getResponse();
+      if (!token) {
+        captchaError = true;
+        return;
+      }
+    }
+
+    const data = {
+      email: email.value,
+      password: password.value,
+      captcha: token
+    };
+    const res = await httpPost('/signup', data);
+    if (res.status === 201 || res.status == 200) {
+      alert('good');
+    } else {
+      alert('bad');
+    }
   }
 </script>
+
+<svelte:head>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+</svelte:head>
 
 <div class="login">
   <h1>Login</h1>
@@ -30,6 +65,13 @@
     <div class="form-group">
       <label for="password">Password</label>
       <input type="password" id="password" name="password" required />
+    </div>
+    <div class="form-group">
+      <div
+        class="cf-turnstile {captchaError ? 'captcha-error' : ''}"
+        data-sitekey={TurnstileSiteKey}
+        data-theme="light"
+      ></div>
     </div>
     <div class="form-group">
       <button type="submit" onclick={(e: Event) => login(e)}>Log In</button>
@@ -66,6 +108,15 @@
 
   .form-group {
     margin-bottom: 1rem;
+  }
+
+  .cf-turnstile {
+    width: 300px;
+    margin: 0 auto;
+  }
+
+  .captcha-error {
+    border: 2px solid var(--secondary-color);
   }
 
   button {

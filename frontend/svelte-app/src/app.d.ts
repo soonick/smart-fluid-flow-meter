@@ -8,6 +8,10 @@ declare global {
     // interface PageState {}
     // interface Platform {}
   }
+
+  const turnstile: {
+    getResponse: () => string;
+  };
 }
 
 export {};
