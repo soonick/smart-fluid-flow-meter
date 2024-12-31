@@ -1,4 +1,4 @@
-FROM node:23-alpine
+FROM node:23
 
 EXPOSE 5173
 
