@@ -75,6 +75,14 @@ class BackendService {
                              void* event_data);
 
   /**
+   * Will be triggered if the wifi gets disconnected
+   */
+  static void wifi_disconnected_handler(void* arg,
+                                        esp_event_base_t event_base,
+                                        int32_t event_id,
+                                        void* event_data);
+
+  /**
    * Handles all HTTP events received after a request
    */
   static esp_err_t http_event_handler(esp_http_client_event_t* evt);
