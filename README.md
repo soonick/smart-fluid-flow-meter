@@ -1,6 +1,6 @@
 # Smart Fluid Flow Meter
 
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/soonick/smart-fluid-flow-meter/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/soonick/smart-fluid-flow-meter/tree/master)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/mekadomus/smart-fluid-flow-meter/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/mekadomus/smart-fluid-flow-meter/tree/master)
 
 Hardware and software for a system that monitors flow of fluids (most likely water) and reports it to a back-end that can emit alerts based on configured preferences.
 
@@ -25,7 +25,7 @@ Hardware and software for a system that monitors flow of fluids (most likely wat
 
 When the device is in factory settings (Green, yellow and red LEDs on), the ESP32 will start an access point named `my-esp32-ssid`. Connect to the access point using the password `APassword`.
 
-Once connected, navigate to the url: `sffm.ncona.com`. You should get a screen like the following:
+Once connected, navigate to the url: `sffm.mekadomus.com`. You should get a screen like the following:
 
 ![Configure device screen](/docs/assets/config-screen.png)
 <config screen>

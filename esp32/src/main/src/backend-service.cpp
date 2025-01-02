@@ -14,7 +14,7 @@
 BackendService* BackendService::instance = nullptr;
 SemaphoreHandle_t BackendService::IP_SEMPH = NULL;
 const char* BackendService::BACKEND_URL =
-    "https://smart-fluid-flow-meter-backend.ncona.com";
+    "https://smart-fluid-flow-meter.mekadomus.com";
 const char* BackendService::MEASUREMENT_API = "/measurement";
 const char* BackendService::TAG = "backend-service";
 esp_netif_t* BackendService::wifi_if = NULL;
