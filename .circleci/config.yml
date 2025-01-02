@@ -6,8 +6,8 @@ jobs:
       image: ubuntu-2204:2023.04.2
     steps:
       - add_ssh_keys:
-          fingerprints:
-            - "SHA256:nJ4fjs8DBnXE5nlOYmIhp+mdPAhHGegiK+RcxQ+2/kA"
+         fingerprints:
+           - "SHA256:MRMWg/VV3JcvnIfw9+k5Qig+pZZYKjL8wv/Be06JOz8"
       - checkout
       - run: cd backend && echo $SERVICE_ACCOUNT_KEY | base64 --decode > service-account-key.json && make verify
   frontend:
@@ -15,8 +15,8 @@ jobs:
       image: ubuntu-2204:2023.04.2
     steps:
       - add_ssh_keys:
-          fingerprints:
-            - "SHA256:nJ4fjs8DBnXE5nlOYmIhp+mdPAhHGegiK+RcxQ+2/kA"
+         fingerprints:
+           - "SHA256:MRMWg/VV3JcvnIfw9+k5Qig+pZZYKjL8wv/Be06JOz8"
       - checkout
       - run: cd frontend && make verify
   esp32:
@@ -24,8 +24,8 @@ jobs:
       image: ubuntu-2204:2023.04.2
     steps:
       - add_ssh_keys:
-          fingerprints:
-            - "SHA256:nJ4fjs8DBnXE5nlOYmIhp+mdPAhHGegiK+RcxQ+2/kA"
+         fingerprints:
+           - "SHA256:MRMWg/VV3JcvnIfw9+k5Qig+pZZYKjL8wv/Be06JOz8"
       - checkout
       - run: git submodule update --init --recursive
       - run: cd esp32 && make verify
@@ -34,8 +34,8 @@ jobs:
       image: ubuntu-2204:2023.04.2
     steps:
       - add_ssh_keys:
-          fingerprints:
-            - "SHA256:nJ4fjs8DBnXE5nlOYmIhp+mdPAhHGegiK+RcxQ+2/kA"
+         fingerprints:
+           - "SHA256:MRMWg/VV3JcvnIfw9+k5Qig+pZZYKjL8wv/Be06JOz8"
       - checkout
       - run: sh scripts/tag.sh
   publish-backend:
@@ -43,8 +43,8 @@ jobs:
       image: ubuntu-2204:2023.04.2
     steps:
       - add_ssh_keys:
-          fingerprints:
-            - "SHA256:nJ4fjs8DBnXE5nlOYmIhp+mdPAhHGegiK+RcxQ+2/kA"
+         fingerprints:
+           - "SHA256:MRMWg/VV3JcvnIfw9+k5Qig+pZZYKjL8wv/Be06JOz8"
       - checkout
       - run: sh scripts/publish-backend.sh
 
