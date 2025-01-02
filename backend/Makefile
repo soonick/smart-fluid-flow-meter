@@ -14,7 +14,7 @@ image-prod: image
 		-w /smart-fluid-flow-meter/ \
 		smart-fluid-flow-meter-backend-image \
 		cargo build --release
-	@docker build -f dockerfiles/prod -t smart-fluid-flow-meter-backend-image-prod .
+	@docker build -f dockerfiles/prod -t backend-prod .
 .PHONY: image-prod
 
 ssh: clean
