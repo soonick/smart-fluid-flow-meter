@@ -5,7 +5,7 @@ set -x
 
 # Constants
 REGISTRY_URL='us-central1-docker.pkg.dev'
-IMAGE_NAME="smart-fluid-flow-meter-backend-image-prod"
+IMAGE_NAME="backend-prod"
 
 # Log-in to remote docker as one of the first steps as we have no control
 # over the availability of the registry
