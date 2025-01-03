@@ -18,7 +18,7 @@ jobs:
          fingerprints:
            - "SHA256:D5v5W7Cgjwp7YRMC+tmGu5h73CSzGBG/UbwgLMUs7/w"
       - checkout
-      - run: cd frontend && make verify
+      - run: cd frontend && cp .env.sample .env && make verify
   esp32:
     machine:
       image: ubuntu-2204:2023.04.2

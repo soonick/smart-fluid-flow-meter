@@ -16,6 +16,7 @@ install: image
 
 build: install
 	@docker run --rm -it \
+		--env-file=.env \
 		-v $(PWD)/svelte-app:/svelte-app \
 		-w /svelte-app/ \
 		smart-fluid-flow-meter-frontend-image \
@@ -24,6 +25,7 @@ build: install
 
 start: install
 	@docker run --rm -it -p 5173:5173 \
+		--env-file=.env \
 		-v $(PWD)/svelte-app:/svelte-app \
 		-w /svelte-app/ \
 		smart-fluid-flow-meter-frontend-image
@@ -31,12 +33,14 @@ start: install
 
 start-prod: image-prod
 	@docker run --rm -it -p 5173:5173 \
+		--env-file=.env \
 		--name smart-fluid-flow-meter-frontend-prod \
 		console-prod
 .PHONY: start-prod
 
 ssh: image
 	@docker run --rm -it -p 5173:5173 \
+		--env-file=.env \
 		-v $(PWD)/svelte-app:/svelte-app \
 		-w /svelte-app/ \
 		smart-fluid-flow-meter-frontend-image \
@@ -45,6 +49,7 @@ ssh: image
 
 check-format: install
 	@docker run --rm -it \
+		--env-file=.env \
 		-v $(PWD)/svelte-app:/svelte-app \
 		-w /svelte-app/ \
 		smart-fluid-flow-meter-frontend-image \
@@ -53,6 +58,7 @@ check-format: install
 
 format: install
 	@docker run --rm -it \
+		--env-file=.env \
 		-v $(PWD)/svelte-app:/svelte-app \
 		-w /svelte-app/ \
 		smart-fluid-flow-meter-frontend-image \
@@ -61,6 +67,7 @@ format: install
 
 check-svelte: install
 	@docker run --rm -it \
+		--env-file=.env \
 		-v $(PWD)/svelte-app:/svelte-app \
 		-w /svelte-app/ \
 		smart-fluid-flow-meter-frontend-image \
