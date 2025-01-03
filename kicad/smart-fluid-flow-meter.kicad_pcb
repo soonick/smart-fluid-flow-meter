@@ -2891,7 +2891,7 @@
 		(pad "1" thru_hole circle
 			(at 12.7 35.56)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 17 "unconnected-(U2-3V3-Pad1)")
@@ -2902,7 +2902,7 @@
 		(pad "2" thru_hole circle
 			(at 12.7 33.02)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 1 "0")
@@ -2913,7 +2913,7 @@
 		(pad "3" thru_hole circle
 			(at 12.7 30.48)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 16 "unconnected-(U2-D15-Pad3)")
@@ -2924,7 +2924,7 @@
 		(pad "4" thru_hole circle
 			(at 12.7 27.94)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 23 "unconnected-(U2-D2-Pad4)")
@@ -2935,7 +2935,7 @@
 		(pad "5" thru_hole circle
 			(at 12.7 25.4)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 9 "Net-(U2-D4)")
@@ -2946,7 +2946,7 @@
 		(pad "6" thru_hole circle
 			(at 12.7 22.86)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 14 "unconnected-(U2-RX2-Pad6)")
@@ -2957,7 +2957,7 @@
 		(pad "7" thru_hole circle
 			(at 12.7 20.32)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 11 "unconnected-(U2-TX2-Pad7)")
@@ -2968,7 +2968,7 @@
 		(pad "8" thru_hole circle
 			(at 12.7 17.78)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 24 "unconnected-(U2-D5-Pad8)")
@@ -2979,7 +2979,7 @@
 		(pad "9" thru_hole circle
 			(at 12.7 15.24)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 10 "Net-(U2-D18)")
@@ -2990,7 +2990,7 @@
 		(pad "10" thru_hole circle
 			(at 12.7 12.7)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 25 "unconnected-(U2-D19-Pad10)")
@@ -3001,7 +3001,7 @@
 		(pad "11" thru_hole circle
 			(at 12.7 10.16)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 20 "unconnected-(U2-D21-Pad11)")
@@ -3012,7 +3012,7 @@
 		(pad "12" thru_hole circle
 			(at 12.7 7.62)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 29 "unconnected-(U2-RX0-Pad12)")
@@ -3023,7 +3023,7 @@
 		(pad "13" thru_hole circle
 			(at 12.7 5.08)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 21 "unconnected-(U2-TX0-Pad13)")
@@ -3034,7 +3034,7 @@
 		(pad "14" thru_hole circle
 			(at 12.7 2.54)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 19 "unconnected-(U2-D22-Pad14)")
@@ -3045,7 +3045,7 @@
 		(pad "15" thru_hole circle
 			(at 12.7 0)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 32 "unconnected-(U2-D23-Pad15)")
@@ -3056,7 +3056,7 @@
 		(pad "16" thru_hole rect
 			(at -12.7 0)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 26 "unconnected-(U2-EN-Pad16)")
@@ -3067,7 +3067,7 @@
 		(pad "17" thru_hole circle
 			(at -12.7 2.54)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 18 "unconnected-(U2-VP-Pad17)")
@@ -3078,7 +3078,7 @@
 		(pad "18" thru_hole circle
 			(at -12.7 5.08)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 22 "unconnected-(U2-VN-Pad18)")
@@ -3089,7 +3089,7 @@
 		(pad "19" thru_hole circle
 			(at -12.7 7.62)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 31 "unconnected-(U2-D34-Pad19)")
@@ -3100,7 +3100,7 @@
 		(pad "20" thru_hole circle
 			(at -12.7 10.16)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 12 "unconnected-(U2-D35-Pad20)")
@@ -3111,7 +3111,7 @@
 		(pad "21" thru_hole circle
 			(at -12.7 12.7)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 2 "Net-(D1-A)")
@@ -3122,7 +3122,7 @@
 		(pad "22" thru_hole circle
 			(at -12.7 15.24)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 5 "Net-(D2-A)")
@@ -3133,7 +3133,7 @@
 		(pad "23" thru_hole circle
 			(at -12.7 17.78)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 15 "unconnected-(U2-D25-Pad23)")
@@ -3144,7 +3144,7 @@
 		(pad "24" thru_hole circle
 			(at -12.7 20.32)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 27 "unconnected-(U2-D26-Pad24)")
@@ -3155,7 +3155,7 @@
 		(pad "25" thru_hole circle
 			(at -12.7 22.86)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 13 "unconnected-(U2-D27-Pad25)")
@@ -3166,7 +3166,7 @@
 		(pad "26" thru_hole circle
 			(at -12.7 25.4)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 7 "Net-(D3-A)")
@@ -3177,7 +3177,7 @@
 		(pad "27" thru_hole circle
 			(at -12.7 27.94)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 28 "unconnected-(U2-D12-Pad27)")
@@ -3188,7 +3188,7 @@
 		(pad "28" thru_hole circle
 			(at -12.7 30.48)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 30 "unconnected-(U2-D13-Pad28)")
@@ -3199,7 +3199,7 @@
 		(pad "29" thru_hole circle
 			(at -12.7 33.02)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 1 "0")
@@ -3210,7 +3210,7 @@
 		(pad "30" thru_hole circle
 			(at -12.7 35.56)
 			(size 1.524 1.524)
-			(drill 0.762)
+			(drill 0.9)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net 33 "Net-(J1-Pin_3)")
