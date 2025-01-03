@@ -1,0 +1,10 @@
+FROM node:23
+
+EXPOSE 5173
+ENV PORT=5173
+
+COPY svelte-app/build /console
+
+WORKDIR /console
+
+CMD ["node", "index.js"]
