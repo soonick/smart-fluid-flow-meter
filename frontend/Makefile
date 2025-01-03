@@ -2,6 +2,10 @@ image:
 	@docker build -f dockerfiles/dev -t smart-fluid-flow-meter-frontend-image .
 .PHONY: image
 
+image-prod: build
+	@docker build -f dockerfiles/prod -t console-prod .
+.PHONY: image-prod
+
 install: image
 	@docker run --rm -it \
 		-v $(PWD)/svelte-app:/svelte-app \
@@ -9,7 +13,6 @@ install: image
 		smart-fluid-flow-meter-frontend-image \
 		npm install
 .PHONY: install
-
 
 build: install
 	@docker run --rm -it \
@@ -26,12 +29,18 @@ start: install
 		smart-fluid-flow-meter-frontend-image
 .PHONY: start
 
+start-prod: image-prod
+	@docker run --rm -it -p 5173:5173 \
+		--name smart-fluid-flow-meter-frontend-prod \
+		console-prod
+.PHONY: start-prod
+
 ssh: image
 	@docker run --rm -it -p 5173:5173 \
 		-v $(PWD)/svelte-app:/svelte-app \
 		-w /svelte-app/ \
 		smart-fluid-flow-meter-frontend-image \
-		sh
+		bash
 .PHONY: ssh
 
 check-format: install

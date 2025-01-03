@@ -47,6 +47,15 @@ jobs:
            - "SHA256:D5v5W7Cgjwp7YRMC+tmGu5h73CSzGBG/UbwgLMUs7/w"
       - checkout
       - run: sh scripts/publish-backend.sh
+  publish-frontend:
+    machine:
+      image: ubuntu-2204:2023.04.2
+    steps:
+      - add_ssh_keys:
+         fingerprints:
+           - "SHA256:D5v5W7Cgjwp7YRMC+tmGu5h73CSzGBG/UbwgLMUs7/w"
+      - checkout
+      - run: sh scripts/publish-frontend.sh
 
 workflows:
   version: 2
@@ -64,6 +73,12 @@ workflows:
             branches:
               only: master
       - publish-backend:
+          requires:
+            - tag
+          filters:
+            branches:
+              only: master
+      - publish-frontend:
           requires:
             - tag
           filters:
