@@ -34,7 +34,7 @@ async fn save_measurement_invalid_json() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/measurement")
+                .uri("/v1/measurement")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from("{}"))
                 .unwrap(),
@@ -63,7 +63,7 @@ async fn save_measurement_success() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/measurement")
+                .uri("/v1/measurement")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -103,7 +103,7 @@ async fn save_measurement_database_failure() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/measurement")
+                .uri("/v1/measurement")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -138,7 +138,7 @@ async fn save_measurement_success_mysql() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/measurement")
+                .uri("/v1/measurement")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -183,7 +183,7 @@ async fn save_measurement_success_firestore() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/measurement")
+                .uri("/v1/measurement")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -229,7 +229,7 @@ async fn save_measurement_ignores_duplicate_firestore() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/measurement")
+                .uri("/v1/measurement")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -244,7 +244,7 @@ async fn save_measurement_ignores_duplicate_firestore() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/measurement")
+                .uri("/v1/measurement")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),

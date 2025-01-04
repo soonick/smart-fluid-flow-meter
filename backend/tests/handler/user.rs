@@ -47,7 +47,7 @@ async fn sign_up_user_weak_password() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/sign_up")
+                .uri("/v1/sign_up")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -96,7 +96,7 @@ async fn sign_up_failed_captcha() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/sign_up")
+                .uri("/v1/sign_up")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -149,7 +149,7 @@ async fn sign_up_failed_hash() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/sign_up")
+                .uri("/v1/sign_up")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -203,7 +203,7 @@ async fn sign_up_user_success_firestore() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/sign_up")
+                .uri("/v1/sign_up")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -269,7 +269,7 @@ async fn sign_up_user_duplicate_firestore() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/sign_up")
+                .uri("/v1/sign_up")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -283,7 +283,7 @@ async fn sign_up_user_duplicate_firestore() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/sign_up")
+                .uri("/v1/sign_up")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
@@ -339,7 +339,7 @@ async fn sign_up_user_success_mysql() {
         .oneshot(
             Request::builder()
                 .method(http::Method::POST)
-                .uri("/sign_up")
+                .uri("/v1/sign_up")
                 .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
                 .body(Body::from(serde_json::to_string(&input).unwrap()))
                 .unwrap(),
